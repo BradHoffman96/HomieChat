@@ -17,6 +17,7 @@
 		82B2D71B2281C52E00422EC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82B2D7192281C52E00422EC6 /* LaunchScreen.storyboard */; };
 		82B2D7262281C52F00422EC6 /* MessageAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B2D7252281C52F00422EC6 /* MessageAppTests.swift */; };
 		82B2D7312281C52F00422EC6 /* MessageAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B2D7302281C52F00422EC6 /* MessageAppUITests.swift */; };
+		82B2D7402281F32700422EC6 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B2D73F2281F32700422EC6 /* Message.swift */; };
 		8BFB31EBFC68DF6C30757BBD /* Pods_MessageAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FBC204F38A2B5A7EF32BA83 /* Pods_MessageAppTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,7 @@
 		82B2D72C2281C52F00422EC6 /* MessageAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessageAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		82B2D7302281C52F00422EC6 /* MessageAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAppUITests.swift; sourceTree = "<group>"; };
 		82B2D7322281C52F00422EC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		82B2D73F2281F32700422EC6 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		85E2652C42931F9A4DCF3B3B /* Pods-MessageAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessageAppTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MessageAppTests/Pods-MessageAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		B518845793A950AEC46419F9 /* Pods_MessageApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MessageApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA9149E82A10B7986636A769 /* Pods-MessageApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessageApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-MessageApp/Pods-MessageApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 		82B2D70C2281C52B00422EC6 /* MessageApp */ = {
 			isa = PBXGroup;
 			children = (
+				82B2D73E2281F31500422EC6 /* Models */,
 				82B2D70D2281C52B00422EC6 /* AppDelegate.swift */,
 				82B2D70F2281C52B00422EC6 /* ChatViewController.swift */,
 				82B2D7112281C52B00422EC6 /* Main.storyboard */,
@@ -143,6 +146,14 @@
 				82B2D7322281C52F00422EC6 /* Info.plist */,
 			);
 			path = MessageAppUITests;
+			sourceTree = "<group>";
+		};
+		82B2D73E2281F31500422EC6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				82B2D73F2281F32700422EC6 /* Message.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		95734311F2DD775053D590B1 /* Frameworks */ = {
@@ -397,6 +408,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				82B2D7102281C52B00422EC6 /* ChatViewController.swift in Sources */,
+				82B2D7402281F32700422EC6 /* Message.swift in Sources */,
 				82B2D7162281C52B00422EC6 /* MessageApp.xcdatamodeld in Sources */,
 				82B2D70E2281C52B00422EC6 /* AppDelegate.swift in Sources */,
 			);
