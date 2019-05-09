@@ -36,17 +36,12 @@ class ChatViewController: MessagesViewController, MessageCellDelegate {
         
         return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
     }
-    
-    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        print(message.sender.displayName)
-        return NSAttributedString(string: message.sender.displayName, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
-    }
 }
 
 extension ChatViewController: MessagesDataSource {
     
     func currentSender() -> Sender {
-        return Sender(id: "any_unique_id", displayName: "Steven")
+        return Sender(id: "any_unique_id", displayName: "Steven Kinky")
     }
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
@@ -57,6 +52,15 @@ extension ChatViewController: MessagesDataSource {
         return messages.count
     }
     
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        let firstName = message.sender.displayName.components(separatedBy: " ").first
+        let lastName = message.sender.displayName.components(separatedBy: " ").last
+        let initials = "\(firstName?.first ?? "A")\(lastName?.first ?? "A")"
+        print(initials)
+        
+        let avatar = Avatar(image: nil, initials: initials)
+        avatarView.set(avatar: avatar)
+    }
 }
 
 extension ChatViewController: MessageInputBarDelegate {
@@ -82,20 +86,16 @@ extension ChatViewController: MessageInputBarDelegate {
 
 extension ChatViewController: MessagesDisplayDelegate, MessagesLayoutDelegate {
     
-    
-    
     func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        print(message.sender.displayName)
         return NSAttributedString(string: message.sender.displayName, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
     }
     
-    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        
-        return NSAttributedString(string: "Delivered", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption2)])
+    func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        return 16.0
     }
     
-    func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 16.0
+    func avatarPosition(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> AvatarPosition {
+        return AvatarPosition.init(vertical: AvatarPosition.Vertical.messageTop)
     }
 }
 
