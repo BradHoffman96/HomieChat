@@ -53,6 +53,13 @@ class _HomePageState extends State<HomePage> {
         margin: EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
           children: <Widget>[
+            Container(
+              //margin: EdgeInsets.symmetric(horizontal: 4.0),
+              child: IconButton(
+                icon: Icon(Icons.camera_alt),
+                onPressed: () => _handleSubmitted(_textEditingController.text),
+              ),
+            ),
             Flexible(
               child: TextField(
                 controller: _textEditingController,
