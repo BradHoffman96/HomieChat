@@ -8,6 +8,8 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double c_width = MediaQuery.of(context).size.width * 0.8;
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
@@ -23,7 +25,8 @@ class ChatMessage extends StatelessWidget {
               Text(_name, style: Theme.of(context).textTheme.subhead),
               Container(
                 margin: EdgeInsets.only(top: 5.0),
-                child: Text(text)
+                width: c_width,
+                child: Text(text, textAlign: TextAlign.left,)
               )
             ],
           )
