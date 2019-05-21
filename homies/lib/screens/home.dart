@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
           ),
           new Divider(height: 1.0),
           Container(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
             decoration: BoxDecoration(color: Theme.of(context).cardColor),
             child: _buildTextComposer(),
           )
