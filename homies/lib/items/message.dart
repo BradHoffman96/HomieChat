@@ -12,6 +12,7 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double c_width = MediaQuery.of(context).size.width * 0.8;
+    print(image);
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.0),

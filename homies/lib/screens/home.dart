@@ -56,6 +56,7 @@ class _HomePageState extends State<HomePage> {
     ChatMessage message = new ChatMessage(text: text, image: _image);
     setState(() {
       _messages.insert(0, message);
+      _image = null;
     });
   }
 
