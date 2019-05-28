@@ -57,12 +57,16 @@ class _HomePageState extends State<HomePage> {
               //margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.camera_alt),
-                onPressed: () => _handleSubmitted(_textEditingController.text),
+                onPressed: () => {
+                  
+                },
               ),
             ),
             Flexible(
               child: TextField(
                 controller: _textEditingController,
+                minLines: 1,
+                maxLines: 8,
                 decoration: InputDecoration.collapsed(hintText: "Message"),
               ),
             ),
