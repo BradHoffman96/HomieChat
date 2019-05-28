@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import "package:flutter/material.dart";
+import "package:image_picker/image_picker.dart";
 
 import "../items/message.dart";
+import "../items/image.dart";
 
 class HomePage extends StatefulWidget {
   @override
@@ -10,6 +14,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _textEditingController = new TextEditingController();
   final List<ChatMessage> _messages = <ChatMessage>[];
+  File _image;
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +51,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _handleSubmitted(String text) {
+  _handleSubmittedMessage(String text) {
     _textEditingController.clear();
-    ChatMessage message = new ChatMessage(text: text);
+    ChatMessage message = new ChatMessage(text: text, image: _image);
     setState(() {
       _messages.insert(0, message);
     });
@@ -57,8 +70,9 @@ class _HomePageState extends State<HomePage> {
               //margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.camera_alt),
-                onPressed: () => {
-                  
+                onPressed: () async {
+                  await getImage();
+                  _handleSubmittedMessage("");
                 },
               ),
             ),
@@ -74,7 +88,7 @@ class _HomePageState extends State<HomePage> {
               margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.send),
-                onPressed: () => _handleSubmitted(_textEditingController.text),
+                onPressed: () => _handleSubmittedMessage(_textEditingController.text),
               ),
             )
           ],

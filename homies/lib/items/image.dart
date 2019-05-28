@@ -2,9 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class ChatMessage extends StatelessWidget {
-  ChatMessage({this.text, this.image});
-  final text;
+class ImageMessage extends StatelessWidget {
+  ImageMessage({this.image});
   final File image;
 
   String _name = "Brad Hoffman";
@@ -29,8 +28,7 @@ class ChatMessage extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(top: 5.0),
                 width: c_width,
-                child: image == null ? Text(text, textAlign: TextAlign.left,)
-                  : Image.file(image)
+                child: Image.file(image)
               )
             ],
           )
