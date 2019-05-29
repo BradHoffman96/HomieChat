@@ -28,7 +28,25 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("HOMIES"),
+        title: Text("HOMIE CHAT"),
+        actions: <Widget>[
+          PopupMenuButton(
+            icon: Icon(Icons.settings),
+            onSelected: (result) {
+              print(result);
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem(
+                value: "Profile",
+                child: Text("Profile")
+              ),
+              const PopupMenuItem(
+                value: "Settings",
+                child: Text("Settings")
+              )
+            ]
+          )
+        ],
       ),
       body: Column(
         children: <Widget>[
