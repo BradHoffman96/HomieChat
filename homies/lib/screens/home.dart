@@ -3,6 +3,9 @@ import 'dart:io';
 import "package:flutter/material.dart";
 import "package:image_picker/image_picker.dart";
 
+import 'package:homies/screens/profile.dart';
+import 'package:homies/screens/settings.dart';
+
 import "../items/message.dart";
 import "../items/image.dart";
 
@@ -33,15 +36,19 @@ class _HomePageState extends State<HomePage> {
           PopupMenuButton(
             icon: Icon(Icons.settings),
             onSelected: (result) {
-              print(result);
+              if (result == "profile") {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+              } else if (result == "settings") {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+              }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem(
-                value: "Profile",
+                value: "profile",
                 child: Text("Profile")
               ),
               const PopupMenuItem(
-                value: "Settings",
+                value: "settings",
                 child: Text("Settings")
               )
             ]
