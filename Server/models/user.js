@@ -2,12 +2,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
-const options = {
-  userNewUrlParser: true
-}
-
-var users = mongoose.createConnection("mongodb://127.0.0.1:27017/HomieChat", options);
-
 var UserSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true},
@@ -36,7 +30,7 @@ UserSchema.pre('save', function (next) {
         return next(err);
       }
 
-      bcrypt.hash(user.password, salt, function (err, hash)  {
+      bcrypt.hash(user.password, salt, null, function (err, hash)  {
         if (err) {
           return next(err);
         }
@@ -50,4 +44,4 @@ UserSchema.pre('save', function (next) {
   }
 });
 
-module.exports = users.model("User", UserSchema);
+module.exports = mongoose.model("User", UserSchema);

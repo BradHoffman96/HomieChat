@@ -26,4 +26,13 @@ router.post("/register", (req, res) => {
   });
 });
 
+router.post("login", (req, res) => {
+  console.log(req.body);
+
+  User.findOne({email: req.body.email}, function(err, user) {
+    user.comparePassword()
+    
+  })
+})
+
 module.exports = router;
