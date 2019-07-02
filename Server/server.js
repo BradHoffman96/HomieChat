@@ -6,7 +6,6 @@ const passport = require('passport');
 const morgan = require('morgan');
 
 const config = require('./config/database.js');
-const authRoutes = require('./auth.js');
 
 mongoose.connect(config.database, { useCreateIndex: true, useNewUrlParser: true });
 
@@ -19,7 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 
-app.use('/', authRoutes);
+app.use('/', require('./routes'));
 
 app.listen(port, () => {
   console.log("Server is now listening on port: " + port);

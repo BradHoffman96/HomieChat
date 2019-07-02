@@ -22,24 +22,30 @@ UserSchema.methods.comparePassword = function(password, callback) {
 };
 
 UserSchema.pre('save', function (next) {
+  console.log('PASSWORD HASH');
   var user = this;
 
   if (this.isModified('password') || this.isNew) {
+    console.log("GEN SALT");
     bcrypt.genSalt(10, function(err, salt) {
       if (err) {
         return next(err);
       }
 
-      bcrypt.hash(user.password, salt, null, function (err, hash)  {
+      console.log("HASH");
+      bcrypt.hash(user.password, salt, function (err, hash)  {
         if (err) {
+          console.log(err);
           return next(err);
         }
 
+        console.log("PASS IS HASHED");
         user.password = hash;
         next();
       });
     });
   } else {
+    console.log("SOMETHING HAPPENED");
     return next();
   }
 });
