@@ -26,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -34,20 +35,28 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextField(
-                decoration: InputDecoration(hintText: "CMTA Email"),
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(hintText: "Email",
+                  hintStyle: TextStyle(color: Colors.white),
+                  icon: Icon(Icons.email, color: Colors.white,),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 1.0))),
                 controller: emailTextEditingController,
                 onChanged: (value) => this.email = value,
               ),
               SizedBox(height: 25.0),
               TextField(
-                decoration: InputDecoration(hintText: "Password"),
+                decoration: InputDecoration(hintText: "Password", 
+                  hintStyle: TextStyle(color: Colors.white),
+                  icon: Icon(Icons.lock, color: Colors.white,),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 1.0))),
+                style: TextStyle(color: Colors.white),
+                cursorColor: Colors.white,
                 controller: passwordTextEditingController,
                 onChanged: (value) => this.password = value,
                 obscureText: true,
               ),
               SizedBox(height: 35.0),
               FlatButton(
-                color: Color(0xff0C8350),
                 child: Text("LOGIN",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white),
