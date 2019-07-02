@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import "package:flutter/material.dart";
-import "package:homies/services/profile.dart" as profileService;
+import "package:homies/services/profile.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -12,11 +12,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   SharedPreferences prefs;
   File image;
-
-  _getPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-    return true;
-  }
+  bool isEditing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +21,23 @@ class _ProfilePageState extends State<ProfilePage> {
         title: Text("Profile"),
         actions: <Widget>[
           FlatButton(
-            child: Text("Edit", style: TextStyle(color: Colors.white),),
+            child: this.isEditing ? Text("FINISH", style: TextStyle(color: Colors.white, fontSize: 16.0),)
+              : Text("EDIT", style: TextStyle(color: Colors.white, fontSize: 16.0)),
             onPressed: () {
-              Navigator.pop(context);
+              setState(() {
+                if (this.isEditing) {
+                  this.isEditing = false;
+                } else {
+                  this.isEditing = true;
+                }
+              });
             },
           )
         ],
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(32.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -43,8 +46,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 200,
                 padding: EdgeInsets.all(2.0),
                 decoration: new BoxDecoration(
-                  color: Colors.grey,
-                  shape: BoxShape.circle
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(spreadRadius: .1,
+                      blurRadius: 5.0,
+                      offset: Offset(2.0, 2.0))
+                  ]
                 ),
                 child: FutureBuilder(
                   future: _getImage(),
@@ -82,14 +90,41 @@ class _ProfilePageState extends State<ProfilePage> {
   _getImage() async {
     prefs = await SharedPreferences.getInstance();
 
-    if (prefs.getString("IMAGE_PROFILE_PATH") != null) {
+    if (prefs.getString("PROFILE_IMAGE_PATH") != null) {
       return CircleAvatar(
-        backgroundImage: FileImage(File(prefs.getString("IMAGE_PROFILE_PATH")))
+        backgroundImage: FileImage(File(prefs.getString("PROFILE_IMAGE_PATH")), scale: 0.1),
+        foregroundColor: this.isEditing ? Colors.white : Colors.transparent,
+        child: this.isEditing ? Container(
+          width: 200.0,
+          height: 200.0,
+          decoration: new BoxDecoration(
+            color: Colors.white54,
+            shape: BoxShape.circle,
+          ), 
+          child: FlatButton(
+            //color: Colors.white54,
+            child: Text("EDIT IMAGE", style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0)),
+            onPressed: () {
+              ProfileService().storeImageFromGallery();
+            }
+       )) : Container(width: 0, height: 0),
       );
     } else {
       return CircleAvatar(
-        backgroundImage: ExactAssetImage("assets/profile.png"),
+        backgroundImage: ExactAssetImage("assets/profile.png", scale: 0.1),
         backgroundColor: Colors.white,
+        child: this.isEditing ? FlatButton(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white10,
+              shape: BoxShape.circle
+            ),
+            child: Text("Edit Image")),
+          onPressed: () {
+            ProfileService().storeImageFromGallery();
+          },) : Container(width: 0, height: 0),
       );
     }
   }

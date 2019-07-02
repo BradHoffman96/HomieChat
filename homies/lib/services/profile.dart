@@ -8,10 +8,13 @@ class ProfileService {
   SharedPreferences prefs;
 
   storeImageFromGallery() async {
-    final File image = await ImagePicker.pickImage(source: ImageSource.camera);
+    final File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    if (image == null) return;
+
     Directory appDocDir = await getApplicationDocumentsDirectory();
     final String path = appDocDir.path;
-    final File profileImage = await image.copy('$path/profile.image');
+    final File profileImage = await image.copy('$path/profile.png');
 
     prefs = await SharedPreferences.getInstance();
     prefs.setString("PROFILE_IMAGE_PATH", profileImage.path);
