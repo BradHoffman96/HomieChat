@@ -4,6 +4,7 @@ const router = require('express').Router();
 const jwt = require('jwt-simple');
 const multer = require('multer');
 const fs = require('fs');
+const path = require('path');
 
 const User = require('../models/user.js');
 
@@ -46,7 +47,6 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
 //then it will change what is necessary and upload another user entirely.
 //So the whole object will get rewritten
 router.post('/', passport.authenticate("jwt", {session: false}), function(req, res) {
- 
   if (!req.body.birth_name || !req.body.display_name) {
     return res.status(400).json({success: false, msg: "Please send the correct fields."});
   }
@@ -73,6 +73,23 @@ router.post('/', passport.authenticate("jwt", {session: false}), function(req, r
 
 router.post('/image', passport.authenticate('jwt', {session: false}), upload.single('image'), function(req, res) {
   res.status(200).json({success: true, msg: "Image uploaded."});
+});
+
+router.get('/image', passport.authenticate('jwt', {session:false}), function(req, res) {
+  var rootDir = path.join(__dirname, '../images', String(req.user.id), "profile.jpg");
+
+  if (!fs.existsSync(rootDir)) {
+    console.log("Does not exist: " + rootDir);
+    res.status(400).json({success: false, msg:"Image cannot be found"});
+  } else {
+    res.sendFile(rootDir, {success: true, msg: "Found image for: " + req.user.email}, function(err) {
+      if (err) {
+        return res.status(500).json({success: false, msg: "Something went wrong while retrieiving image."});
+      } else {
+        console.log("Profile Image sent for: " + req.user.email);
+      }
+    });
+  }
 });
 
 module.exports = router;
