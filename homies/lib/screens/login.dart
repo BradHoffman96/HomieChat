@@ -75,6 +75,13 @@ class _LoginPageState extends State<LoginPage> {
     prefs.setBool("LOGGED_IN", value);
   }
 
+  _storeToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString("TOKEN", token);
+
+  }
+
   _login() async {
     var body = {
       "email": this.email,
@@ -107,9 +114,11 @@ class _LoginPageState extends State<LoginPage> {
     print(response.body);
 
     if (response.statusCode == 200) {
+      var body = json.decode(response.body);
       print("SUCCESFUL LOGIN");
 
       _updatePreferences(true);
+      _storeToken(body["token"]);
 
       Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
     } else {
