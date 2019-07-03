@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ProfileService {
   SharedPreferences prefs;
 
+  String displayName, birthName;
+
   storeImageFromGallery() async {
     final File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 

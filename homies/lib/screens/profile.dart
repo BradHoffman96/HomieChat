@@ -10,9 +10,20 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final profileService = ProfileService();
+  TextEditingController displayNameController, birthNameController;
   SharedPreferences prefs;
   File image;
   bool isEditing = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    displayNameController = new TextEditingController(text: profileService.displayName);
+    birthNameController = new TextEditingController(text: profileService.birthName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +90,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     }
                   },
                 ),
-              )
+              ),
+              TextField(
+                decoration: InputDecoration(hintText: "Display Name"),
+                controller: displayNameController,
+                onChanged: (value) => profileService.displayName = value,
+              ),
+              SizedBox(height: 25.0),
+              TextField(
+                decoration: InputDecoration(hintText: "Birth Name"),
+                controller: birthNameController,
+                onChanged: (value) => profileService.displayName = value,
+              ),
             ],
           ),
         ),
@@ -90,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
   _getImage() async {
     prefs = await SharedPreferences.getInstance();
 
-    if (prefs.getString("PROFILE_IMAGE_PATH") != null) {
+    if (File(prefs.getString("PROFILE_IMAGE_PATH")) != null) {
       return CircleAvatar(
         backgroundImage: FileImage(File(prefs.getString("PROFILE_IMAGE_PATH")), scale: 0.1),
         foregroundColor: this.isEditing ? Colors.white : Colors.transparent,
