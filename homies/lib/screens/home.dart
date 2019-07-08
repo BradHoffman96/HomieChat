@@ -19,12 +19,18 @@ class _HomePageState extends State<HomePage> {
   final List<ChatMessage> _messages = <ChatMessage>[];
   File _image;
 
-  Future getImage() async {
+  Future<bool> getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-    setState(() {
-      _image = image;
-    });
+    if (image == null) {
+      return false;
+    } else {
+      setState(() {
+        _image = image;
+      });
+
+      return true;
+    }
   }
 
   @override
@@ -97,8 +103,10 @@ class _HomePageState extends State<HomePage> {
               child: IconButton(
                 icon: Icon(Icons.camera_alt),
                 onPressed: () async {
-                  await getImage();
-                  _handleSubmittedMessage("");
+                  var result = await getImage();
+                  if (result == true) {
+                    _handleSubmittedMessage("");
+                  }
                 },
               ),
             ),
