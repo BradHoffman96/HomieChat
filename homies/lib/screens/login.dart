@@ -41,6 +41,7 @@ class _LoginPageState extends State<LoginPage> {
                   icon: Icon(Icons.email, color: Colors.white,),
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 1.0))),
                 controller: emailTextEditingController,
+                cursorColor: Colors.white,
                 onChanged: (value) => this.email = value,
               ),
               SizedBox(height: 25.0),

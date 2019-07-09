@@ -1,3 +1,5 @@
+*.jpg
 Pods/
 Podfile.lock
 node_modules/
+
