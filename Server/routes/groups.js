@@ -4,6 +4,7 @@ const router = require('express').Router();
 const jwt = require('jwt-simple');
 
 const Group = require('../models/group.js');
+const User = require('../models/user.js');
 
 
 router.post("/", passport.authenticate('jwt', {session:false}), function(req, res) {
@@ -19,12 +20,28 @@ router.post("/", passport.authenticate('jwt', {session:false}), function(req, re
     if (err) throw err;
 
     if (group) {
-      res.status(200).json({success: true, msg: "Group created."});
+      User.findById(req.user.id, function(err, user) {
+        if (err) throw err;
+
+        if (user) {
+          user.groups.push(group._id);
+          user.save(function(err, newUser) {
+            if (err) throw err;
+
+            if (newUser) {
+              res.status(200).json({success: true, msg: "Group created."});
+            } else {
+              res.status(400).json({success: false, msg: "Error saving group to user."});
+            }
+          });
+        } else {
+          res.status(400).json({success: false, msg: "Error finding user."});
+        }
+      });
     } else {
       res.status(400).json({success: false, msg: "Error creating group."});
     }
   });
-
 });
 
 module.exports = router;

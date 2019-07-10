@@ -8,6 +8,7 @@ var UserSchema = new Schema({
   display_name: { type: String, required: true },
   birth_name: { type: String, required: true },
   pic_path: { type: String },
+  groups: [String],
   created_at: Date
 });
 
