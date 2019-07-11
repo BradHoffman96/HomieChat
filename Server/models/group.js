@@ -6,6 +6,9 @@ var GroupSchema = new Schema({
     type: String,
     required: true
   },
+  topic: {
+    type: String
+  },
   owner: {
     type: String,
     required: true

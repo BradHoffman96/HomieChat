@@ -46,7 +46,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
 //If user edits any details, it will take the user object currently stored on device
 //then it will change what is necessary and upload another user entirely.
 //So the whole object will get rewritten
-router.post('/', passport.authenticate("jwt", {session: false}), function(req, res) {
+router.post('/', passport.authenticate("jwt", {session: false}), upload.single('image'), function(req, res) {
   if (!req.body.birth_name || !req.body.display_name) {
     return res.status(400).json({success: false, msg: "Please send the correct fields."});
   }
