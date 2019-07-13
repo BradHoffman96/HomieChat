@@ -10,16 +10,13 @@ const MessageSchmea = new Schema({
     type: Date,
     required: true
   },
-  content: {
+  text: {
     type: String,
     required: true 
   },
-  group_id: {
-    type: String,
-    required: true
-  },
   likes: Number,
-  image_url: String
+  likers: [String],
+  media_url: String
 });
 
 module.exports = mongoose.model('Messages', MessageSchema);
