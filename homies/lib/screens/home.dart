@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _textEditingController = new TextEditingController();
   final List<ChatMessage> _messages = <ChatMessage>[];
-  File _image;
+  File _media;
 
   Future<bool> getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
       return false;
     } else {
       setState(() {
-        _image = image;
+        _media = image;
       });
 
       return true;
@@ -36,31 +36,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("HOMIE CHAT"),
-        // actions: <Widget>[
-        //   PopupMenuButton(
-        //     icon: Icon(Icons.settings),
-        //     onSelected: (result) {
-        //       if (result == "profile") {
-        //         Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-        //       } else if (result == "settings") {
-        //         Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
-        //       }
-        //     },
-        //     itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-        //       const PopupMenuItem(
-        //         value: "profile",
-        //         child: Text("Profile")
-        //       ),
-        //       const PopupMenuItem(
-        //         value: "settings",
-        //         child: Text("Settings")
-        //       )
-        //     ]
-        //   )
-        // ],
-      ),
+      appBar: AppBar(title: Text("HOMIE CHAT")),
       endDrawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -120,10 +96,10 @@ class _HomePageState extends State<HomePage> {
 
   _handleSubmittedMessage(String text) {
     _textEditingController.clear();
-    ChatMessage message = new ChatMessage(text: text, image: _image);
+    ChatMessage message = new ChatMessage(text: text, media: _media);
     setState(() {
       _messages.insert(0, message);
-      _image = null;
+      _media = null;
     });
   }
 
@@ -139,10 +115,33 @@ class _HomePageState extends State<HomePage> {
               child: IconButton(
                 icon: Icon(Icons.camera_alt),
                 onPressed: () async {
-                  var result = await getImage();
+                  showModalBottomSheet(context: context, builder: (BuildContext context) {
+                    return new Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        new ListTile(
+                          leading: new Icon(Icons.camera_alt),
+                          title: new Text('Camera'),
+                          onTap: () {
+                            print("camera");
+                            Navigator.pop(context);
+                          }
+                        ),
+                        new ListTile(
+                          leading: new Icon(Icons.photo_album),
+                          title: new Text('Gallery'),
+                          onTap: () {
+                            print("Gallery");
+                            Navigator.pop(context);
+                          }
+                        ),
+                      ],
+                    );
+                  });
+                  /*var result = await getImage();
                   if (result == true) {
-                    _handleSubmittedMessage("");
-                  }
+                    /_handleSubmittedMessage("");
+                  }*/
                 },
               ),
             ),
