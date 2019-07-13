@@ -38,28 +38,62 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("HOMIE CHAT"),
-        actions: <Widget>[
-          PopupMenuButton(
-            icon: Icon(Icons.settings),
-            onSelected: (result) {
-              if (result == "profile") {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-              } else if (result == "settings") {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
-              }
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem(
-                value: "profile",
-                child: Text("Profile")
+        // actions: <Widget>[
+        //   PopupMenuButton(
+        //     icon: Icon(Icons.settings),
+        //     onSelected: (result) {
+        //       if (result == "profile") {
+        //         Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+        //       } else if (result == "settings") {
+        //         Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+        //       }
+        //     },
+        //     itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+        //       const PopupMenuItem(
+        //         value: "profile",
+        //         child: Text("Profile")
+        //       ),
+        //       const PopupMenuItem(
+        //         value: "settings",
+        //         child: Text("Settings")
+        //       )
+        //     ]
+        //   )
+        // ],
+      ),
+      endDrawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('HOMIE CHAT'),
+              decoration: BoxDecoration(
+                color: Colors.blue
               ),
-              const PopupMenuItem(
-                value: "settings",
-                child: Text("Settings")
-              )
-            ]
-          )
-        ],
+            ),
+            ListTile(
+              title: Text('Profile'),
+              onTap: () {
+                print("Profile");
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              title: Text("Gallery"),
+              onTap: () {
+                print("Gallery");
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              title: Text("Settings"),
+              onTap: () {
+                print("Settings");
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        )
       ),
       body: Column(
         children: <Widget>[
