@@ -47,7 +47,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
 //then it will change what is necessary and upload another user entirely.
 //So the whole object will get rewritten
 router.post('/', passport.authenticate("jwt", {session: false}), upload.single('image'), function(req, res) {
-  if (!req.body.birth_name || !req.body.display_name) {
+  if (!req.body.display_name) {
     return res.status(400).json({success: false, msg: "Please send the correct fields."});
   }
 
@@ -55,7 +55,6 @@ router.post('/', passport.authenticate("jwt", {session: false}), upload.single('
     if (err) throw err;
 
     if (user) {
-      user.birth_name = req.body.birth_name;
       user.display_name = req.body.display_name;
 
       user.save(function (err, newUser) {
