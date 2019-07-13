@@ -76,6 +76,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 print("Profile");
                 Navigator.of(context).pop();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
               },
             ),
             ListTile(
@@ -90,6 +91,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 print("Settings");
                 Navigator.of(context).pop();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
               },
             )
           ],
