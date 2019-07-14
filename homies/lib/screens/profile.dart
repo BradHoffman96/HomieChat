@@ -12,7 +12,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final profileService = ProfileService();
-  TextEditingController displayNameController, birthNameController;
+  TextEditingController displayNameController;
   SharedPreferences prefs;
   File image;
   bool isEditing = false;
@@ -25,7 +25,6 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
 
     displayNameController = new TextEditingController(text: profileService.displayName);
-    birthNameController = new TextEditingController(text: profileService.birthName);
   }
 
   @override
@@ -94,17 +93,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                 ),
               ),
+              SizedBox(height: 25.0),
               TextField(
                 decoration: InputDecoration(hintText: "Display Name"),
                 controller: displayNameController,
                 onChanged: (value) => profileService.displayName = value,
               ),
               SizedBox(height: 25.0),
-              TextField(
-                decoration: InputDecoration(hintText: "Birth Name"),
-                controller: birthNameController,
-                onChanged: (value) => profileService.displayName = value,
-              ),
               Container(
                 child: MaterialButton(
                   color: Colors.red,
