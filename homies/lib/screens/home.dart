@@ -103,6 +103,34 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future getImageFromGallery() async {
+    var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 600.0, maxWidth: 600.0);
+
+    if (imageFile != null) {
+      setState(() {
+        _media = imageFile;
+      });
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
+  Future getImageFromCamera() async {
+    var imageFile = await ImagePicker.pickImage(source: ImageSource.camera, maxHeight: 600.0, maxWidth: 600.0);
+
+    if (imageFile != null) {
+      setState(() {
+        _media = imageFile;
+      });
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
   Widget _buildTextComposer() {
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).accentColor),
@@ -114,7 +142,7 @@ class _HomePageState extends State<HomePage> {
               //margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.camera_alt),
-                onPressed: () async {
+                onPressed: () {
                   showModalBottomSheet(context: context, builder: (BuildContext context) {
                     return new Column(
                       mainAxisSize: MainAxisSize.min,
@@ -122,17 +150,23 @@ class _HomePageState extends State<HomePage> {
                         new ListTile(
                           leading: new Icon(Icons.camera_alt),
                           title: new Text('Camera'),
-                          onTap: () {
-                            print("camera");
+                          onTap: () async {
                             Navigator.pop(context);
+                            var result = await getImageFromCamera();
+                            if (result) {
+                              _handleSubmittedMessage("");
+                            }
                           }
                         ),
                         new ListTile(
                           leading: new Icon(Icons.photo_album),
                           title: new Text('Gallery'),
-                          onTap: () {
-                            print("Gallery");
+                          onTap: () async {
                             Navigator.pop(context);
+                            var result = await getImageFromGallery();
+                            if (result) {
+                              _handleSubmittedMessage("");
+                            }
                           }
                         ),
                       ],
