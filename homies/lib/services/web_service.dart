@@ -27,7 +27,7 @@ class WebService {
     "accept": "application/json"
   };
 
-  String apiEndpoint = "http://127.0.0.1:3000";
+  String apiEndpoint = "127.0.0.1:3000";
 
   String loginEndpoint = "/auth/login";
   String logoutEndpoint = "/auth/logout";
@@ -36,11 +36,11 @@ class WebService {
     var uri = _getUri(loginEndpoint).toString();
 
     var body = {
-      email: email,
-      password: password
+      'email': email,
+      'password': password
     };
 
-    var response = await _performHttpRequest(verb: HttpRequest.Get, uri: uri, body: json.encode(body));
+    var response = await _performHttpRequest(verb: HttpRequest.Post, uri: uri, body: json.encode(body));
 
     return WebServiceResponse.fromHttpResponse(response);
   }

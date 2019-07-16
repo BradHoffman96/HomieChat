@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:homies/scoped_models/base_model.dart';
 import 'package:homies/scoped_models/login_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -61,18 +62,23 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: true,
                 ),
                 SizedBox(height: 35.0),
+                _getFeedbackUI(model),
+                SizedBox(height: 35.0),
                 FlatButton(
                   child: Text("LOGIN",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white),
-                  ), onPressed: () {
+                  ), onPressed: () async {
                     print(email);
                     print(password);
 
+                    var viewState = await model.login(email: email, password: password);
+                    if (viewState) {
+                      Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+                    }
+
                     this.emailTextEditingController.clear();
                     this.passwordTextEditingController.clear();
-
-                    _login();
                   },
                 )
               ],
@@ -84,81 +90,26 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _updatePreferences(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    prefs.setBool("LOGGED_IN", value);
-  }
 
-  _storeToken(String token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.setString("TOKEN", token);
-
-  }
-
-  _login() async {
-    var body = {
-      "email": this.email,
-      "password": this.password
-    };
-
-    var headers = {
-      "content-type": "application/json",
-      "accept": "application/json"
-    };
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircularProgressIndicator()
-          ],
+  Widget _getFeedbackUI(LoginModel model) {
+    switch (model.state) {
+      case ViewState.Busy:
+        return Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(
+              Theme.of(context).primaryColor
+            ),
+          )
         );
-      },
-    );
-
-    var url = "http://127.0.0.1:3000/auth/login";
-    var response = await this.client.post(url, body: json.encode(body), headers: headers);
-
-    Navigator.pop(context);
-
-    print(response.body);
-
-    if (response.statusCode == 200) {
-      var body = json.decode(response.body);
-      print("SUCCESFUL LOGIN");
-
-      _updatePreferences(true);
-      _storeToken(body["token"]);
-
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
-    } else {
-      print("LOGIN NOT SUCCESFUL");
-
-      _updatePreferences(false);
-      //Present error handling
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Invalid Username or Password"),
-            //content: Center(child: Text("Please try again.")),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("DONE"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        }
-      );
+        break;
+      case ViewState.Error:
+        return Text("Could not login at this moment.");
+      case ViewState.Success:
+        return Center(child: Text('Login Success'));
+      case ViewState.WaitingForInput:
+      default:
+        return Container();
     }
   }
 }

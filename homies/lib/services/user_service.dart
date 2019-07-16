@@ -2,12 +2,14 @@
 import 'dart:convert';
 
 import 'package:homies/models/user.dart';
+import 'package:homies/services/persistence_service.dart';
 import 'package:homies/services/web_service.dart';
 
 import '../service_locator.dart';
 
 class UserService {
   final WebService _webService = locator<WebService>();
+  final PersistenceService _persistenceService = locator<PersistenceService>();
 
   User _user;
 
@@ -17,10 +19,18 @@ class UserService {
     var loginResponse = await _webService.login(email: email, password: password);
 
     if (!loginResponse.hasError) {
-      var userFromLogin = User.fromJson(json.decode(loginResponse.body));
+      var result = json.decode(loginResponse.body);
 
-      if (userFromLogin != null) {
-        _user = userFromLogin;
+      if (result != null && result['success']) {
+        print(result['token']);
+
+        //TODO: Save token to shared preferences here
+        _persistenceService.storeKey("LOGGED_IN", true);
+        _persistenceService.storeKey("TOKEN", result['token']);
+
+        //TODO: Get user data next
+      } else {
+        _persistenceService.storeKey("LOGGED_IN", false);
       }
     }
 
