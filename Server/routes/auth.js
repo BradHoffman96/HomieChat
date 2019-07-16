@@ -53,7 +53,7 @@ router.post("/login", (req, res) => {
   });
 });
 
-router.get('/signout', passport.authenticate('jwt', {session: false}), function(req, res) {
+router.get('/logout', passport.authenticate('jwt', {session: false}), function(req, res) {
   req.logout();
   res.json({success: true, msg: 'Sign out successful.'});
 });
