@@ -39,7 +39,7 @@ var upload = multer({
 
 router.get('/', passport.authenticate('jwt', { session: false }), function(req, res) {
   console.log(req.user);
-  res.status(200).send(req.user);
+  res.status(200).json({success: true, user: req.user});
 });
 
 
