@@ -34,9 +34,34 @@ class WebService {
 
   String apiEndpoint = "127.0.0.1:3000";
 
+  String registerEndpoint = "/auth/register";
   String loginEndpoint = "/auth/login";
   String logoutEndpoint = "/auth/logout";
   String getUserEndpoint = "/profile";
+
+  Future<WebServiceResponse> register({
+    @required String email,
+    @required String password,
+    @required String displayName,
+    @required File image
+  }) async {
+    var uri = _getUri(registerEndpoint);
+
+    var request = new http.MultipartRequest("POST", uri);
+    request.fields['email'] = email;
+    request.fields['password'] = password;
+    request.fields['display_name'] = displayName;
+    request.files.add(http.MultipartFile.fromBytes('image', image.readAsBytesSync()));
+
+    request.send().then((response) {
+      if (response.statusCode == 200) {
+        print(response.stream);
+      }
+
+      //TODO: Add a StreamResponse model to replace WebServiceResponse
+      return WebServiceResponse.emptySuccess();
+    });
+  }
 
   Future<WebServiceResponse> login({@required String email, @required String password}) async {
     var uri = _getUri(loginEndpoint).toString();

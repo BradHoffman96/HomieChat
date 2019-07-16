@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:homies/models/user.dart';
 import 'package:homies/services/persistence_service.dart';
@@ -14,6 +15,33 @@ class UserService {
   User _user;
 
   User get currentUser => _user;
+
+  Future<bool> registerUser({String email, String password, String displayName, File image}) async {
+    var loginResponse = await _webService.register(
+      email: email, 
+      password: password,
+      displayName: displayName,
+      image: image);
+
+    if (!loginResponse.hasError) {
+      var result = json.decode(loginResponse.body);
+
+      if (result != null && result['success']) {
+        print("SUCCESS");
+
+        //TODO: Save token to shared preferences here
+        //_persistenceService.storeKey("LOGGED_IN", true);
+        //_persistenceService.storeKey("TOKEN", result['token']);
+
+        //TODO: Get user data next
+      } else {
+        //_persistenceService.storeKey("LOGGED_IN", false);
+        print("No SUCCESS");
+      }
+    }
+
+    return !loginResponse.hasError;
+  }
 
   Future<bool> loginUser({String email, String password}) async {
     var loginResponse = await _webService.login(email: email, password: password);

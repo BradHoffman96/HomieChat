@@ -64,22 +64,37 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 35.0),
                 _getFeedbackUI(model),
                 SizedBox(height: 35.0),
-                FlatButton(
-                  child: Text("LOGIN",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white),
-                  ), onPressed: () async {
-                    print(email);
-                    print(password);
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    FlatButton(
+                      child: Text("LOGIN",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ), onPressed: () async {
+                        print(email);
+                        print(password);
 
-                    var viewState = await model.login(email: email, password: password);
-                    if (viewState) {
-                      Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
-                    }
+                        var viewState = await model.login(email: email, password: password);
+                        if (viewState) {
+                          Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+                        }
 
-                    this.emailTextEditingController.clear();
-                    this.passwordTextEditingController.clear();
-                  },
+                        this.emailTextEditingController.clear();
+                        this.passwordTextEditingController.clear();
+                      },
+                    ),
+                    Text("or"),
+                    FlatButton(
+                      child: Text("SIGNUP",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white)
+                      ),
+                      onPressed: () async {
+                        print("Signup");
+                      }
+                    )
+                  ]
                 )
               ],
             ),
