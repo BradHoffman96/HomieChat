@@ -8,10 +8,10 @@ import 'base_model.dart';
 class RegisterModel extends BaseModel {
   UserService _userService = locator<UserService>();
 
-  Future<bool> register({String email, String password, String display_name, File image}) async {
+  Future<bool> register({String email, String password, String displayName, File image}) async {
     setState(ViewState.Busy);
 
-    var result = await _userService.registerUser(email: email, password: password, display_name: display_name, image: image);
+    var result = await _userService.registerUser(email: email, password: password, displayName: displayName, image: image);
 
     if (result) {
       result = await _userService.getUser();

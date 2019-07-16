@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:homies/scoped_models/base_model.dart';
 import 'package:homies/scoped_models/login_view_model.dart';
+import 'package:homies/screens/register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -91,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(color: Colors.white)
                       ),
                       onPressed: () async {
-                        print("Signup");
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterView()));
                       }
                     )
                   ]
