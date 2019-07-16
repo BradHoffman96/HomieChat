@@ -4,10 +4,13 @@ import 'package:homies/screens/login.dart';
 import 'package:homies/screens/root.dart';
 import 'package:homies/service_locator.dart';
 
-void main() {
-  setupLocator();
-
-  runApp(MyApp());
+Future<void> main() async {
+  try {
+    await setupLocator();
+    runApp(MyApp());
+  } catch (e) {
+    print(e);
+  }
 }
 
 class MyApp extends StatelessWidget {

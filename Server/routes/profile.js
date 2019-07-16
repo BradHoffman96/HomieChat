@@ -38,10 +38,11 @@ var upload = multer({
 });
 
 router.get('/', passport.authenticate('jwt', { session: false }), function(req, res) {
-  console.log(req.user);
-  res.status(200).json({success: true, user: req.user});
+  var user = req.user;
+  user.password = undefined;
+  console.log(user);
+  res.status(200).json({success: true, user: user});
 });
-
 
 //If user edits any details, it will take the user object currently stored on device
 //then it will change what is necessary and upload another user entirely.

@@ -47,12 +47,36 @@ class UserService {
       if (result != null && result['success']) {
         _persistenceService.storeKey("LOGGED_IN", false);
         _persistenceService.deleteKey("TOKEN");
+        _persistenceService.deleteKey("USER");
       }
     } else {
       print(logoutResponse.body);
     }
 
     return !logoutResponse.hasError;
+  }
+
+  Future<bool> getUser() async {
+    var getUserResponse = await _webService.getUser();
+
+    if (!getUserResponse.hasError) {
+      var result = json.decode(getUserResponse.body);
+      print(result);
+
+      if (result != null && result['success']) {
+        var userFromLogin = User.fromJson(json.decode(result['user']));
+        
+        if (userFromLogin != null) {
+          _user = userFromLogin;
+
+          _persistenceService.storeKey("USER", userFromLogin);
+        }
+      } else {
+        print(getUserResponse.body);
+      }
+    }
+
+    return !getUserResponse.hasError;
   }
 
   Future<bool> checkForUser() async {

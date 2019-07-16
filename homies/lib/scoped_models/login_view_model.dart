@@ -10,6 +10,7 @@ class LoginModel extends BaseModel {
     setState(ViewState.Busy);
 
     var result = await _userService.loginUser(email: email, password: password);
+    result = await _userService.getUser();
 
     var loginState = result ? ViewState.Success : ViewState.Error;
 
@@ -17,5 +18,6 @@ class LoginModel extends BaseModel {
     
     return true;
   }
+
 
 }

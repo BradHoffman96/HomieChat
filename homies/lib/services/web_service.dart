@@ -25,7 +25,7 @@ class WebService {
     return _instance;
   }
 
-  final PersistenceService _persistenceService = locator<PersistenceService>();
+  PersistenceService _persistenceService = locator<PersistenceService>();
 
   Map<String, String> _defaultHeaders = {
     "content-type": "application/json",
@@ -36,6 +36,7 @@ class WebService {
 
   String loginEndpoint = "/auth/login";
   String logoutEndpoint = "/auth/logout";
+  String getUserEndpoint = "/profile";
 
   Future<WebServiceResponse> login({@required String email, @required String password}) async {
     var uri = _getUri(loginEndpoint).toString();
@@ -52,6 +53,14 @@ class WebService {
 
   Future<WebServiceResponse> logout() async {
     var uri = _getUri(logoutEndpoint).toString();
+
+    var response = await _performHttpRequest(verb: HttpRequest.Get, uri: uri, requiresAuthToken: true);
+
+    return WebServiceResponse.fromHttpResponse(response);
+  }
+
+  Future<WebServiceResponse> getUser() async {
+    var uri = _getUri(getUserEndpoint).toString();
 
     var response = await _performHttpRequest(verb: HttpRequest.Get, uri: uri, requiresAuthToken: true);
 

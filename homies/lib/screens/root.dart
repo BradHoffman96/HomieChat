@@ -1,7 +1,9 @@
 import "package:flutter/material.dart";
 import 'package:homies/screens/home.dart';
 import 'package:homies/screens/login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:homies/services/persistence_service.dart';
+
+import '../service_locator.dart';
 
 class RootPage extends StatefulWidget {
   @override
@@ -9,20 +11,19 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
-  SharedPreferences prefs;
+  PersistenceService _persistenceService = locator<PersistenceService>();
 
-  _checkPreferences() async {
-    prefs = await SharedPreferences.getInstance();
+  Future<bool> _checkPreferences() async {
+    bool loggedIn = await _persistenceService.getKey("LOGGED_IN");
 
-    if (prefs.getBool("LOGGED_IN") != null) {
-      return prefs.getBool("LOGGED_IN");
+    if (loggedIn != null) {
+      return loggedIn;
     } else {
       print("LOGGED_IN does not exist.");
 
-      prefs.setBool("LOGGED_IN", false);
+      _persistenceService.storeKey("LOGGED_IN", false);
       return false;
     }
-
   }
 
   @override
