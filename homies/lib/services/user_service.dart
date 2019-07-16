@@ -64,16 +64,16 @@ class UserService {
       print(result);
 
       if (result != null && result['success']) {
-        var userFromLogin = User.fromJson(json.decode(result['user']));
+        var userFromLogin = User.fromJson(result['user']);
         
         if (userFromLogin != null) {
           _user = userFromLogin;
 
           _persistenceService.storeKey("USER", userFromLogin);
         }
-      } else {
-        print(getUserResponse.body);
       }
+    } else {
+      print(getUserResponse.body);
     }
 
     return !getUserResponse.hasError;
