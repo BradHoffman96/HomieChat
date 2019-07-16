@@ -90,8 +90,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-
-
   Widget _getFeedbackUI(LoginModel model) {
     switch (model.state) {
       case ViewState.Busy:

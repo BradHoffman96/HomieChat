@@ -37,6 +37,24 @@ class UserService {
     return !loginResponse.hasError;
   }
 
+  Future<bool> logoutUser() async {
+    var logoutResponse = await _webService.logout();
+
+    if (!logoutResponse.hasError) {
+      var result = json.decode(logoutResponse.body);
+      print(result);
+
+      if (result != null && result['success']) {
+        _persistenceService.storeKey("LOGGED_IN", false);
+        _persistenceService.deleteKey("TOKEN");
+      }
+    } else {
+      print(logoutResponse.body);
+    }
+
+    return !logoutResponse.hasError;
+  }
+
   Future<bool> checkForUser() async {
     //TODO: check for user in persistence service
     //if null, return false, else, return true

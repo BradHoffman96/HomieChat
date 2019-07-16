@@ -16,8 +16,9 @@ class PersistenceService {
     return _instance;
   }
 
-  dynamic getKey<T>(String key) async {
-    return _preferences.get(key);
+  dynamic getKey(String key) async {
+    var value = _preferences.get(key);
+    return value;
   }
 
   void storeKey<T>(String key, T value) async {
@@ -30,5 +31,10 @@ class PersistenceService {
     } else if (value is double) {
       _preferences.setDouble(key, value);
     }
+  }
+
+  Future<bool> deleteKey(String key) async {
+    var result = await _preferences.remove(key);
+    return result;
   }
 }

@@ -5,7 +5,10 @@ import 'package:async/async.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:homies/models/web_service_response.dart';
+import 'package:homies/services/persistence_service.dart';
 import 'package:http/http.dart' as http;
+
+import '../service_locator.dart';
 
 enum HttpRequest { Get, Post, Head, Update }
 
@@ -21,6 +24,8 @@ class WebService {
 
     return _instance;
   }
+
+  final PersistenceService _persistenceService = locator<PersistenceService>();
 
   Map<String, String> _defaultHeaders = {
     "content-type": "application/json",
@@ -48,13 +53,23 @@ class WebService {
   Future<WebServiceResponse> logout() async {
     var uri = _getUri(logoutEndpoint).toString();
 
-    var response = await _performHttpRequest(verb: HttpRequest.Post, uri: uri);
+    var response = await _performHttpRequest(verb: HttpRequest.Get, uri: uri, requiresAuthToken: true);
 
     return WebServiceResponse.fromHttpResponse(response);
   }
 
-  Future<http.Response> _performHttpRequest({@required HttpRequest verb, @required String uri, String body, int timeOutInSeconds = DefaultTimeoutInSeconds}) async {
+  Future<http.Response> _performHttpRequest(
+    {@required HttpRequest verb,
+      @required String uri,
+      String body,
+      bool requiresAuthToken = false,
+      int timeOutInSeconds = DefaultTimeoutInSeconds}) async {
     var requestHeaders = Map<String, String>.from(_defaultHeaders);
+
+    if (requiresAuthToken) {
+      String token = await _persistenceService.getKey("TOKEN");
+      requestHeaders.addAll({'Authorization': token});
+    }
 
     http.Response response;
     try {

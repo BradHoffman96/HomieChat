@@ -1,9 +1,13 @@
 import 'dart:io';
 
 import "package:flutter/material.dart";
+import 'package:homies/enums/view_state.dart';
+import 'package:homies/scoped_models/profile_view_model.dart';
 import "package:homies/services/profile.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+
+import 'base_view.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -29,134 +33,118 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Profile"),
-        actions: <Widget>[
-          FlatButton(
-            child: this.isEditing ? Text("FINISH", style: TextStyle(color: Colors.white, fontSize: 16.0),)
-              : Text("EDIT", style: TextStyle(color: Colors.white, fontSize: 16.0)),
-            onPressed: () {
-              setState(() {
-                if (this.isEditing) {
-                  this.isEditing = false;
-                } else {
-                  this.isEditing = true;
-                }
-              });
-            },
-          )
-        ],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: 200,
-                height: 200,
-                padding: EdgeInsets.all(2.0),
-                decoration: new BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(spreadRadius: .1,
-                      blurRadius: 5.0,
-                      offset: Offset(2.0, 2.0))
-                  ]
+    return BaseView<ProfileModel>(
+      builder: (context, child, model) => Scaffold(
+        appBar: AppBar(
+          title: Text("Profile"),
+          actions: <Widget>[
+            FlatButton(
+              child: this.isEditing ? Text("FINISH", style: TextStyle(color: Colors.white, fontSize: 16.0),)
+                : Text("EDIT", style: TextStyle(color: Colors.white, fontSize: 16.0)),
+              onPressed: () {
+                setState(() {
+                  if (this.isEditing) {
+                    this.isEditing = false;
+                  } else {
+                    this.isEditing = true;
+                  }
+                });
+              },
+            )
+          ],
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 200,
+                  height: 200,
+                  padding: EdgeInsets.all(2.0),
+                  decoration: new BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(spreadRadius: .1,
+                        blurRadius: 5.0,
+                        offset: Offset(2.0, 2.0))
+                    ]
+                  ),
+                  child: FutureBuilder(
+                    future: _getImage(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                          // TODO: Handle this case.
+                          return CircularProgressIndicator();
+                          break;
+                        case ConnectionState.waiting:
+                          // TODO: Handle this case.
+                          return CircularProgressIndicator();
+                          break;
+                        case ConnectionState.active:
+                          // TODO: Handle this case.
+                          return CircularProgressIndicator();
+                          break;
+                        case ConnectionState.done:
+                          // TODO: Handle this case.
+                          if (snapshot.hasData) {
+                            return snapshot.data;
+                          }
+                          break;
+                      }
+                    },
+                  ),
                 ),
-                child: FutureBuilder(
-                  future: _getImage(),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                        // TODO: Handle this case.
-                        return CircularProgressIndicator();
-                        break;
-                      case ConnectionState.waiting:
-                        // TODO: Handle this case.
-                        return CircularProgressIndicator();
-                        break;
-                      case ConnectionState.active:
-                        // TODO: Handle this case.
-                        return CircularProgressIndicator();
-                        break;
-                      case ConnectionState.done:
-                        // TODO: Handle this case.
-                        if (snapshot.hasData) {
-                          return snapshot.data;
-                        }
-                        break;
-                    }
-                  },
+                SizedBox(height: 25.0),
+                TextField(
+                  decoration: InputDecoration(hintText: "Display Name"),
+                  controller: displayNameController,
+                  onChanged: (value) => profileService.displayName = value,
                 ),
-              ),
-              SizedBox(height: 25.0),
-              TextField(
-                decoration: InputDecoration(hintText: "Display Name"),
-                controller: displayNameController,
-                onChanged: (value) => profileService.displayName = value,
-              ),
-              SizedBox(height: 25.0),
-              Container(
-                child: MaterialButton(
-                  color: Colors.red,
-                  child: Text("Logout", style: TextStyle(color: Colors.white),),
-                  onPressed: () {
-                    _logout();
-                  },
-                ),
-              )
-            ]
+                SizedBox(height: 25.0),
+                _getFeedbackUI(model),
+                Container(
+                  child: MaterialButton(
+                    color: Colors.red,
+                    child: Text("Logout", style: TextStyle(color: Colors.white),),
+                    onPressed: () async {
+                      var viewState = await model.logout();
+                      if (viewState) {
+                        print("Succesful logout");
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pushReplacementNamed("/");
+                      }
+                    },
+                  ),
+                )
+              ]
+            ),
           ),
         ),
       ),
     );
   }
 
-  _logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    var token = prefs.getString("TOKEN");
-    
-    var headers = {
-      "content-type": "application/json",
-      "accept": "application/json",
-      "Authorization": token
-    };
-
-    var url = "http://127.0.0.1:3000/auth/signout";
-    var response = await this.client.get(url, headers: headers);
-
-    if (response.statusCode != 200) {
-      print(response.body);
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Cannot communicate with servers at this instance."),
-            //content: Center(child: Text("Please try again.")),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("DONE"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        }
-      );
-    } else {
-      prefs.setBool("LOGGED_IN", false);
-
-      Navigator.of(context).pop();
-      Navigator.of(context).pushReplacementNamed("/");
+  Widget _getFeedbackUI(ProfileModel model) {
+    switch (model.state) {
+      case ViewState.Busy:
+        return Center(
+          child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).primaryColor)),
+        );
+        break;
+      case ViewState.Error:
+        return Text('Could not log in at this moment');
+      case ViewState.Success:
+        return Center(child: Text('Login Success'));
+      case ViewState.WaitingForInput:
+      default:
+        return Container();
     }
-
-    print(response.body);
   }
 
   _getImage() async {
