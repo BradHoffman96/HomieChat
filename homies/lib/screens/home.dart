@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import "package:flutter/material.dart";
+import 'package:homies/scoped_models/home_model.dart';
 import "package:image_picker/image_picker.dart";
 
 import 'package:homies/screens/profile.dart';
 import 'package:homies/screens/settings.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import "../items/message.dart";
 import "../items/image.dart";
+import 'base_view.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -35,61 +38,63 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("HOMIE CHAT")),
-      endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text('HOMIE CHAT'),
-              decoration: BoxDecoration(
-                color: Colors.blue
+    return BaseView<HomeModel>(
+      builder: (context, child, model) => Scaffold(
+        appBar: AppBar(title: Text("HOMIE CHAT")),
+        endDrawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: Text('HOMIE CHAT'),
+                decoration: BoxDecoration(
+                  color: Colors.blue
+                ),
               ),
+              ListTile(
+                title: Text('Profile'),
+                onTap: () {
+                  print("Profile");
+                  Navigator.of(context).pop();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+                },
+              ),
+              ListTile(
+                title: Text("Gallery"),
+                onTap: () {
+                  print("Gallery");
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: Text("Settings"),
+                onTap: () {
+                  print("Settings");
+                  Navigator.of(context).pop();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+                },
+              )
+            ],
+          )
+        ),
+        body: Column(
+          children: <Widget>[
+            Flexible(
+              child: ListView.builder(
+                padding: EdgeInsets.all(8.0),
+                reverse: true,
+                itemBuilder: (_, int index) => _messages[index],
+                itemCount: _messages.length,
+              )
             ),
-            ListTile(
-              title: Text('Profile'),
-              onTap: () {
-                print("Profile");
-                Navigator.of(context).pop();
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-              },
-            ),
-            ListTile(
-              title: Text("Gallery"),
-              onTap: () {
-                print("Gallery");
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              title: Text("Settings"),
-              onTap: () {
-                print("Settings");
-                Navigator.of(context).pop();
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
-              },
+            new Divider(height: 1.0),
+            Container(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+              decoration: BoxDecoration(color: Theme.of(context).cardColor),
+              child: _buildTextComposer(),
             )
           ],
-        )
-      ),
-      body: Column(
-        children: <Widget>[
-          Flexible(
-            child: ListView.builder(
-              padding: EdgeInsets.all(8.0),
-              reverse: true,
-              itemBuilder: (_, int index) => _messages[index],
-              itemCount: _messages.length,
-            )
-          ),
-          new Divider(height: 1.0),
-          Container(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-            decoration: BoxDecoration(color: Theme.of(context).cardColor),
-            child: _buildTextComposer(),
-          )
-        ],
+        ),
       ),
     );
   }

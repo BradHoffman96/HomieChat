@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:homies/screens/home.dart';
 import 'package:homies/screens/login.dart';
 import 'package:homies/screens/root.dart';
+import 'package:homies/service_locator.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  setupLocator();
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
