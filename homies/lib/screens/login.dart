@@ -40,6 +40,14 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                SizedBox(
+                  height: 200.0,
+                  child: Image.asset(
+                    "assets/homie_logo.png",
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                SizedBox(height: 40.0,),
                 TextField(
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(hintText: "Email",
