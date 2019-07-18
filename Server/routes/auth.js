@@ -31,18 +31,13 @@ var storage = multer.diskStorage({
 });
 
 var upload = multer({
-  storage: storage,
-  //storage: multer.memoryStorage(),
+  //storage: storage,
+  storage: multer.memoryStorage(),
   onError: function(err, next) {
     console.log(err);
     next(err);
   }
 });
-
-var createUser = function(body) {
-  console.log(body);
-
-  }
 
 router.post("/register", /*createUser,*/ upload.single('image'), async function (req, res) {
   console.log(req.body);
@@ -74,7 +69,7 @@ router.post("/register", /*createUser,*/ upload.single('image'), async function 
       }
 
       //upload image
-      fs.writeFile(dir + "/profile.png", req.body.image, function(err) {
+      fs.writeFile(dir + "/profile.png", new Buffer(req.body.image, 'base64'), function(err) {
         if (err) throw err;
 
         console.log("File uploaded!")
