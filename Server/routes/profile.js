@@ -76,7 +76,7 @@ router.post('/image', passport.authenticate('jwt', {session: false}), upload.sin
 });
 
 router.get('/image', passport.authenticate('jwt', {session:false}), function(req, res) {
-  var rootDir = path.join(__dirname, '../images', String(req.user.id), "profile.jpg");
+  var rootDir = path.join(__dirname, '../images', String(req.user.id), "profile.png");
 
   if (!fs.existsSync(rootDir)) {
     console.log("Does not exist: " + rootDir);
