@@ -12,7 +12,6 @@ const Group = require('../models/group.js');
 
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    console.log(req.body);
     if (!fs.existsSync('./images')) {
       console.log("Creating images folder.");
       fs.mkdirSync('./images');
@@ -33,13 +32,19 @@ var storage = multer.diskStorage({
 
 var upload = multer({
   storage: storage,
+  //storage: multer.memoryStorage(),
   onError: function(err, next) {
     console.log(err);
     next(err);
   }
 });
 
-var createUser = function(req, res, next) {
+var createUser = function(body) {
+  console.log(body);
+
+  }
+
+router.post("/register", /*createUser,*/ upload.single('image'), async function (req, res) {
   console.log(req.body);
 
   Group.findOne({}, function(err, group) {
@@ -54,23 +59,34 @@ var createUser = function(req, res, next) {
     });
 
     newUser.save(function(err, user) {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({success: true, err: err.msg});
-      }
+      if (err) throw err;
       console.log("User created");
 
-      const token = jwt.encode(user, config.secret);
+      if (!fs.existsSync('./images')) {
+        console.log("Creating images folder.");
+        fs.mkdirSync('./images');
+      }
 
-      res.locals.user = user;
-      res.locals.token = token;
-      //return res.status(200).json({success: true, msg: "CREATED_NEW_USER", token: token});
+      var dir = "./images/" + user.id;
+      if (!fs.existsSync(dir)) {
+        console.log("Creating dir:" + dir);
+        fs.mkdirSync(dir);
+      }
+
+      //upload image
+      fs.writeFile(dir + "/profile.png", req.body.image, function(err) {
+        if (err) throw err;
+
+        console.log("File uploaded!")
+        const token = jwt.encode(user, config.secret);
+
+        res.status(200).json({success: true, user: res.locals.user, token: res.locals.token});
+      });
+
+      return user;
     });
   });
-}
 
-router.post("/register", createUser, upload.single('image'), (req, res) => {
-  res.status(200).json({success: true, user: res.locals.user, token: res.locals.token});
 });
 
 router.post("/login", (req, res) => {
