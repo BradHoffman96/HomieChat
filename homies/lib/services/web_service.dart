@@ -46,26 +46,18 @@ class WebService {
     @required String displayName,
     @required File image
   }) async {
-    var uri = _getUri(registerEndpoint);
+    var uri = _getUri(registerEndpoint).toString();
 
-    var request = new http.MultipartRequest("POST", uri);
+    var body = {
+      'email': email,
+      'password': password,
+      'display_name': displayName,
+      'image': base64Encode(image.readAsBytesSync())
+    };
 
-    request.headers['Content-Encoding'] = "application/json";
+    var response = await _performHttpRequest(verb: HttpRequest.Post, uri: uri, body: json.encode(body));
 
-    print(email);
-    print(password);
-    print(displayName);
-
-    request.fields['email'] = email;
-    request.fields['password'] = password;
-    request.fields['display_name'] = displayName;
-
-    request.files.add(http.MultipartFile.fromBytes('image', image.readAsBytesSync(), contentType: new MediaType('image', 'png')));
-
-    var response = await request.send();
-    print(response);
-
-    return WebServiceResponse.emptySuccess();
+    return WebServiceResponse.fromHttpResponse(response);
   }
 
   Future<WebServiceResponse> login({@required String email, @required String password}) async {
