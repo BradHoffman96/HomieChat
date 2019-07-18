@@ -19,16 +19,16 @@ class UserService {
   User get currentUser => _user;
 
   Future<bool> registerUser({String email, String password, String displayName, File image}) async {
-    var loginResponse = await _webService.register(
+    var registerResponse = await _webService.register(
       email: email, 
       password: password,
       displayName: displayName,
       image: image);
 
-    if (!loginResponse.hasError) {
-      var result = json.decode(loginResponse.body);
+    if (!registerResponse.hasError) {
+      var result = json.decode(registerResponse.body);
 
-      if (result != null && result['success']) {
+      if (result != null) {
         print("SUCCESS");
 
         //TODO: Save token to shared preferences here
@@ -42,7 +42,7 @@ class UserService {
       }
     }
 
-    return !loginResponse.hasError;
+    return !registerResponse.hasError;
   }
 
   Future<bool> loginUser({String email, String password}) async {

@@ -1,15 +1,31 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:homies/screens/home.dart';
 import 'package:homies/screens/login.dart';
 import 'package:homies/screens/root.dart';
 import 'package:homies/service_locator.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 Future<void> main() async {
   try {
     await setupLocator();
+    await storeProfileImage();
     runApp(MyApp());
   } catch (e) {
     print(e);
+  }
+}
+
+Future<void> storeProfileImage() async {
+  Directory directory = await getApplicationDocumentsDirectory();
+  var imagePath = join(directory.path, "default_profile.png");
+  if (FileSystemEntity.typeSync(imagePath) == FileSystemEntityType.notFound) {
+    ByteData data = await rootBundle.load("assets/profile.png");
+    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    await File(imagePath).writeAsBytes(bytes);
   }
 }
 

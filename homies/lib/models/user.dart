@@ -5,6 +5,7 @@ class User {
   String displayName;
   List<String> groups;
   File image;
+
   //String profilePicPath;
 
   User({this.email, this.displayName, this.groups});
@@ -13,7 +14,7 @@ class User {
     User user = new User(
       email: data['email'],
       displayName: data['display_name'],
-      groups: new List<String>.from(data['groups'].cast<String>())
+      groups: new List<String>.from(data['groups'].cast<String>()),
     );
 
     return user;

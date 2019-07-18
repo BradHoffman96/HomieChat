@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:homies/models/web_service_response.dart';
 import 'package:homies/services/persistence_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 import '../service_locator.dart';
 
@@ -48,19 +49,23 @@ class WebService {
     var uri = _getUri(registerEndpoint);
 
     var request = new http.MultipartRequest("POST", uri);
+
+    request.headers['Content-Encoding'] = "application/json";
+
+    print(email);
+    print(password);
+    print(displayName);
+
     request.fields['email'] = email;
     request.fields['password'] = password;
     request.fields['display_name'] = displayName;
-    request.files.add(http.MultipartFile.fromBytes('image', image.readAsBytesSync()));
 
-    request.send().then((response) {
-      if (response.statusCode == 200) {
-        print(response.stream);
-      }
+    request.files.add(http.MultipartFile.fromBytes('image', image.readAsBytesSync(), contentType: new MediaType('image', 'png')));
 
-      //TODO: Add a StreamResponse model to replace WebServiceResponse
-      return WebServiceResponse.emptySuccess();
-    });
+    var response = await request.send();
+    print(response);
+
+    return WebServiceResponse.emptySuccess();
   }
 
   Future<WebServiceResponse> login({@required String email, @required String password}) async {

@@ -9,6 +9,8 @@ import 'package:homies/scoped_models/register_view_model.dart';
 import 'package:homies/services/user_service.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../service_locator.dart';
 import 'base_view.dart';
@@ -26,14 +28,10 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController _passwordTextFieldController = new TextEditingController();
   TextEditingController _confirmTextFieldController = new TextEditingController();
 
+  String _displayName, _email, _password;
+
   File _image;
   bool _passwordVisible = false, _confirmVisible = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   _getImage() async {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -60,10 +58,16 @@ class _RegisterViewState extends State<RegisterView> {
                 //TODO: Check for Empty fields
                 // Confirm Passwords
 
+                if (_image == null) {
+                  Directory directory = await getApplicationDocumentsDirectory();
+                  var imagePath = join(directory.path, "default_profile.png");
+                  _image = File(imagePath);
+                }
+
                 var viewState = await model.register(
-                  email: _emailTextFieldController.text,
-                  password: _passwordTextFieldController.text,
-                  displayName: _displayNameController.text,
+                  email: _email,
+                  password: _password,
+                  displayName: _displayName,
                   image: _image);
 
                 if (viewState) {
@@ -104,12 +108,13 @@ class _RegisterViewState extends State<RegisterView> {
                   )
                 ),
                 SizedBox(height: 30.0),
-                _getFeedbackUI(model),
+                _getFeedbackUI(model, context),
                 TextField(
                   decoration: InputDecoration(
                     hintText: "Enter Display Name",
                   ),
                   controller: _displayNameController,
+                  onChanged: (value) => _displayName = value,
                 ),
                 SizedBox(height: 20.0),
                 TextField(
@@ -117,6 +122,7 @@ class _RegisterViewState extends State<RegisterView> {
                     hintText: "Enter Email",
                   ),
                   controller: _emailTextFieldController,
+                  onChanged: (value) => _email = value,
                 ),
                 SizedBox(height: 20.0,),
                 TextField(
@@ -133,6 +139,7 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                   obscureText: !_passwordVisible,
                   controller: _passwordTextFieldController,
+                  onChanged: (value) => _password = value,
                 ),
                 SizedBox(height: 20.0),
                 TextField(
@@ -157,7 +164,7 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  Widget _getFeedbackUI(RegisterModel model) {
+  Widget _getFeedbackUI(RegisterModel model, BuildContext context) {
     switch (model.state) {
       case ViewState.Busy:
         return Center(
