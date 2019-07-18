@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:homies/models/user.dart';
 import 'package:homies/services/persistence_service.dart';
 import 'package:homies/services/web_service.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../service_locator.dart';
 
@@ -106,6 +108,19 @@ class UserService {
 
     return !getUserResponse.hasError;
   }
+
+  /*Future<bool> getImageFromGallery() async {
+
+    if (image == null) return false;
+
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    final String path = appDocDir.path;
+    final File profileImage = await image.copy('$path/profile.png');
+
+    _persistenceService.storeKey("PROFILE_IMAGE_PATH", profileImage.path);
+
+    return true;
+  }*/
 
   Future<bool> checkForUser() async {
     //TODO: check for user in persistence service
