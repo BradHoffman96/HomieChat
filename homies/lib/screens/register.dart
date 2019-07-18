@@ -71,7 +71,7 @@ class _RegisterViewState extends State<RegisterView> {
                   image: _image);
 
                 if (viewState) {
-                  Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+                  Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
                 }
               },
             )

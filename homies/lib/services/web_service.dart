@@ -99,6 +99,7 @@ class WebService {
 
     if (requiresAuthToken) {
       String token = await _persistenceService.getKey("TOKEN");
+      print("authToken: $token");
       requestHeaders.addAll({'Authorization': token});
     }
 

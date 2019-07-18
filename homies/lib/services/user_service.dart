@@ -27,17 +27,18 @@ class UserService {
 
     if (!registerResponse.hasError) {
       var result = json.decode(registerResponse.body);
+      print(result['token']);
 
-      if (result != null) {
+      if (result != null && result['success']) {
         print("SUCCESS");
+        print(result['user']);
 
         //TODO: Save token to shared preferences here
-        //_persistenceService.storeKey("LOGGED_IN", true);
-        //_persistenceService.storeKey("TOKEN", result['token']);
-
-        //TODO: Get user data next
+        _persistenceService.storeKey("LOGGED_IN", true);
+        _persistenceService.storeKey("TOKEN", result['token']);
+        _persistenceService.storeKey("USER", result['user']);
       } else {
-        //_persistenceService.storeKey("LOGGED_IN", false);
+        _persistenceService.storeKey("LOGGED_IN", false);
         print("No SUCCESS");
       }
     }
@@ -95,6 +96,7 @@ class UserService {
 
       if (result != null && result['success']) {
         var userFromLogin = User.fromJson(result['user']);
+        print(userFromLogin);
         
         if (userFromLogin != null) {
           _user = userFromLogin;

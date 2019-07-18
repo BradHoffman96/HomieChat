@@ -13,10 +13,6 @@ class RegisterModel extends BaseModel {
 
     var result = await _userService.registerUser(email: email, password: password, displayName: displayName, image: image);
 
-    if (result) {
-      result = await _userService.getUser();
-    }
-
     var loginState = result ? ViewState.Success : ViewState.Error;
 
     setState(loginState);
