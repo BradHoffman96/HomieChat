@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                         print(password);
 
                         var viewState = await model.login(email: email, password: password);
-                        if (viewState) {
+                        if (model.state == ViewState.Success) {
                           Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
                         }
 

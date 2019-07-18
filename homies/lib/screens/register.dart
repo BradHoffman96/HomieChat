@@ -70,7 +70,7 @@ class _RegisterViewState extends State<RegisterView> {
                   displayName: _displayName,
                   image: _image);
 
-                if (viewState) {
+                if (model.state == ViewState.Success) {
                   Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
                 }
               },
@@ -176,9 +176,9 @@ class _RegisterViewState extends State<RegisterView> {
         );
         break;
       case ViewState.Error:
-        return Text("Could not login at this moment.");
+        return Text("Could not register at this moment.");
       case ViewState.Success:
-        return Center(child: Text('Login Success'));
+        return Center(child: Text('Register Success'));
       case ViewState.WaitingForInput:
       default:
         return Container();
