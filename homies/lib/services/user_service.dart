@@ -6,6 +6,7 @@ import 'package:homies/models/user.dart';
 import 'package:homies/services/persistence_service.dart';
 import 'package:homies/services/web_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../service_locator.dart';
@@ -109,6 +110,23 @@ class UserService {
     }
 
     return !getUserResponse.hasError;
+  }
+
+  Future<bool> getUserImage() async {
+    var getImageResponse = await _webService.getUserImage();
+
+    if (!getImageResponse.hasError) {
+      var documentDir = await getApplicationDocumentsDirectory();
+
+      print(_user);
+      var id = _user.id;
+
+      File file = new File(join(documentDir.path, '$id-profile.png'));
+      file.writeAsBytesSync(getImageResponse.bodyBytes);
+      _user.image = file;
+    }
+
+    return !getImageResponse.hasError;
   }
 
   /*Future<bool> getImageFromGallery() async {

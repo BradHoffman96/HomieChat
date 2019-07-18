@@ -15,6 +15,7 @@ class RegisterModel extends BaseModel {
 
     if (result) {
       result = await _userService.getUser();
+      result = await _userService.getUserImage();
     }
 
     var loginState = result ? ViewState.Success : ViewState.Error;

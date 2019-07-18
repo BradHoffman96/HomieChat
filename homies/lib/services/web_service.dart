@@ -39,6 +39,7 @@ class WebService {
   String loginEndpoint = "/auth/login";
   String logoutEndpoint = "/auth/logout";
   String getUserEndpoint = "/profile";
+  String getUserImageEndpoint = "/profile/image";
 
   Future<WebServiceResponse> register({
     @required String email,
@@ -83,6 +84,14 @@ class WebService {
 
   Future<WebServiceResponse> getUser() async {
     var uri = _getUri(getUserEndpoint).toString();
+
+    var response = await _performHttpRequest(verb: HttpRequest.Get, uri: uri, requiresAuthToken: true);
+
+    return WebServiceResponse.fromHttpResponse(response);
+  }
+
+  Future<WebServiceResponse> getUserImage() async {
+    var uri = _getUri(getUserImageEndpoint).toString();
 
     var response = await _performHttpRequest(verb: HttpRequest.Get, uri: uri, requiresAuthToken: true);
 

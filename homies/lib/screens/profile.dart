@@ -2,8 +2,11 @@ import 'dart:io';
 
 import "package:flutter/material.dart";
 import 'package:homies/enums/view_state.dart';
+import 'package:homies/models/user.dart';
 import 'package:homies/scoped_models/profile_view_model.dart';
-import "package:homies/services/profile.dart";
+import 'package:homies/service_locator.dart';
+import 'package:homies/services/persistence_service.dart';
+import 'package:homies/services/user_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,9 +18,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final profileService = ProfileService();
+  UserService _userService = locator<UserService>();
+  PersistenceService _persistenceService = locator<PersistenceService>();
+  
   TextEditingController displayNameController;
-  SharedPreferences prefs;
+  String displayName;
   File image;
   bool isEditing = false;
 
@@ -27,8 +32,12 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    displayName = _userService.currentUser.displayName;
+  }
 
-    displayNameController = new TextEditingController(text: profileService.displayName);
+  Future<String> _getToken() async {
+    var token = await _persistenceService.getKey("TOKEN");
+    return token;
   }
 
   @override
@@ -73,17 +82,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     ]
                   ),
                   child: FutureBuilder(
-                    future: _getImage(),
+                    future: _getToken(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.none:
-                          // TODO: Handle this case.
-                          return CircularProgressIndicator();
-                          break;
                         case ConnectionState.waiting:
-                          // TODO: Handle this case.
-                          return CircularProgressIndicator();
-                          break;
                         case ConnectionState.active:
                           // TODO: Handle this case.
                           return CircularProgressIndicator();
@@ -91,18 +94,34 @@ class _ProfilePageState extends State<ProfilePage> {
                         case ConnectionState.done:
                           // TODO: Handle this case.
                           if (snapshot.hasData) {
-                            return snapshot.data;
+                            return CircleAvatar(
+                              /*backgroundImage: NetworkImage("http://127.0.0.1:3000/profile/image", headers: {
+                                                    'Authorization': snapshot.data
+                                                  }),*/
+                              backgroundImage: FileImage(_userService.currentUser.image),
+                              backgroundColor: Colors.white,
+                              child: this.isEditing ? FlatButton(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white10,
+                                    shape: BoxShape.circle
+                                  ),
+                                  child: Text("Edit Image")),
+                                onPressed: () {
+                                  print("Update image");
+                                },) : Container(width: 0, height: 0),
+                            );
                           }
                           break;
                       }
                     },
-                  ),
+                  )
                 ),
                 SizedBox(height: 25.0),
                 TextField(
                   decoration: InputDecoration(hintText: "Display Name"),
                   controller: displayNameController,
-                  onChanged: (value) => profileService.displayName = value,
+                  //onChanged: (value) => profileService.displayName = value,
                 ),
                 SizedBox(height: 25.0),
                 _getFeedbackUI(model),
@@ -147,8 +166,8 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  /*
   _getImage() async {
-    prefs = await SharedPreferences.getInstance();
 
     if (File(prefs.getString("PROFILE_IMAGE_PATH")) != null) {
       return CircleAvatar(
@@ -187,5 +206,5 @@ class _ProfilePageState extends State<ProfilePage> {
           },) : Container(width: 0, height: 0),
       );
     }
-  }
+  }*/
 }
