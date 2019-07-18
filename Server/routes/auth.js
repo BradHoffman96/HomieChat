@@ -75,10 +75,9 @@ router.post("/register", /*createUser,*/ upload.single('image'), async function 
         console.log("File uploaded!")
         const token = jwt.encode(user, config.secret);
 
-        res.status(200).json({success: true, user: res.locals.user, token: res.locals.token});
-      });
 
-      return user;
+        res.status(200).json({success: true, token: 'JWT ' + token});
+      });
     });
   });
 
@@ -106,7 +105,7 @@ router.post("/login", (req, res) => {
   });
 });
 
-router.get('/', passport.authenticate('jwt', {session: false}), function(req, res) {
+router.get('/logout', passport.authenticate('jwt', {session: false}), function(req, res) {
   req.logout();
   res.json({success: true, msg: 'Sign out successful.'});
 });
