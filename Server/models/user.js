@@ -6,6 +6,7 @@ var UserSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true},
   display_name: { type: String, required: true },
+  has_pic: { type: boolean, required: true}, 
   groups: [String],
   created_at: Date
 });
