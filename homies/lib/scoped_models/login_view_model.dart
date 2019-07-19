@@ -12,6 +12,7 @@ class LoginModel extends BaseModel {
     var result = await _userService.loginUser(email: email, password: password);
 
     if (result) {
+      print("GET USER AND IMAGE");
       result = await _userService.getUser();
       result = await _userService.getUserImage();
     }

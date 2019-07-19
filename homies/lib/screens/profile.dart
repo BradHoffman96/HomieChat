@@ -7,6 +7,7 @@ import 'package:homies/scoped_models/profile_view_model.dart';
 import 'package:homies/service_locator.dart';
 import 'package:homies/services/persistence_service.dart';
 import 'package:homies/services/user_service.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,8 +23,8 @@ class _ProfilePageState extends State<ProfilePage> {
   PersistenceService _persistenceService = locator<PersistenceService>();
   
   TextEditingController displayNameController;
-  String displayName;
-  File image;
+  String _tempDisplayName;
+  File _tempImage;
   bool isEditing = false;
 
   final client = http.Client();
@@ -32,7 +33,9 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    displayName = _userService.currentUser.displayName;
+    _tempImage = _userService.currentUser.image;
+    _tempDisplayName = _userService.currentUser.displayName;
+    displayNameController = new TextEditingController(text: _tempDisplayName);
   }
 
   Future<String> _getToken() async {
@@ -47,13 +50,32 @@ class _ProfilePageState extends State<ProfilePage> {
         appBar: AppBar(
           title: Text("Profile"),
           actions: <Widget>[
+            isEditing ? FlatButton(
+              child: Text("CANCEL", style: TextStyle(color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.bold),),
+              onPressed: () {
+                setState(() {
+                  _tempDisplayName = _userService.currentUser.displayName;
+                  _tempImage = _userService.currentUser.image;
+                  isEditing = false;
+                });
+              },
+            ) : Container(),
             FlatButton(
               child: this.isEditing ? Text("FINISH", style: TextStyle(color: Colors.white, fontSize: 16.0),)
                 : Text("EDIT", style: TextStyle(color: Colors.white, fontSize: 16.0)),
               onPressed: () {
                 setState(() {
                   if (this.isEditing) {
-                    this.isEditing = false;
+                    //TODO: commit changes to local and network
+                    setState(() {
+                      this.isEditing = false;
+
+                      _userService.currentUser.image = _tempImage;
+                      _userService.currentUser.displayName = _tempDisplayName;
+
+                      _userService.updateProfile();
+                    });
+
                   } else {
                     this.isEditing = true;
                   }
@@ -98,18 +120,30 @@ class _ProfilePageState extends State<ProfilePage> {
                               /*backgroundImage: NetworkImage("http://127.0.0.1:3000/profile/image", headers: {
                                                     'Authorization': snapshot.data
                                                   }),*/
-                              backgroundImage: FileImage(_userService.currentUser.image),
+                              backgroundImage: FileImage(_tempImage),
                               backgroundColor: Colors.white,
-                              child: this.isEditing ? FlatButton(
+                              child: this.isEditing ? GestureDetector(
                                 child: Container(
+                                  height: 200.0,
+                                  width: 200.0,
                                   decoration: BoxDecoration(
-                                    color: Colors.white10,
+                                    color: Colors.white54,
                                     shape: BoxShape.circle
                                   ),
-                                  child: Text("Edit Image")),
-                                onPressed: () {
-                                  print("Update image");
-                                },) : Container(width: 0, height: 0),
+                                  child: Center(
+                                    child: Text(
+                                      "EDIT IMAGE",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20.0,
+                                        color: Colors.black),
+                                    ),
+                                  )                            
+                                ),
+                                onTap: () async {
+                                  showMediaSlector();
+                                },
+                              ) : Container(width: 0, height: 0),
                             );
                           }
                           break;
@@ -119,9 +153,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 25.0),
                 TextField(
+                  enabled: isEditing,
                   decoration: InputDecoration(hintText: "Display Name"),
                   controller: displayNameController,
-                  //onChanged: (value) => profileService.displayName = value,
+                  onChanged: (value) => _tempDisplayName = value,
                 ),
                 SizedBox(height: 25.0),
                 _getFeedbackUI(model),
@@ -130,8 +165,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Colors.red,
                     child: Text("Logout", style: TextStyle(color: Colors.white),),
                     onPressed: () async {
-                      var viewState = await model.logout();
-                      if (viewState) {
+                      await model.logout();
+                      if (model.state == ViewState.Success) {
                         print("Succesful logout");
                         Navigator.of(context).pop();
                         Navigator.of(context).pushReplacementNamed("/");
@@ -164,6 +199,60 @@ class _ProfilePageState extends State<ProfilePage> {
       default:
         return Container();
     }
+  }
+
+  showMediaSlector() {
+    showModalBottomSheet(context: context, builder: (BuildContext context) {
+      return new Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          new ListTile(
+            leading: new Icon(Icons.camera_alt),
+            title: new Text('Camera'),
+            onTap: () async {
+              Navigator.pop(context);
+              await getImageFromCamera();
+            }
+          ),
+          new ListTile(
+            leading: new Icon(Icons.photo_album),
+            title: new Text('Gallery'),
+            onTap: () async {
+              Navigator.pop(context);
+              await getImageFromGallery();
+            }
+          ),
+        ],
+      );
+    });
+  }
+
+  Future getImageFromGallery() async {
+    var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 600.0, maxWidth: 600.0);
+
+    if (imageFile != null) {
+      setState(() {
+        _tempImage = imageFile;
+     });
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
+  Future getImageFromCamera() async {
+    var imageFile = await ImagePicker.pickImage(source: ImageSource.camera, maxHeight: 600.0, maxWidth: 600.0);
+
+    if (imageFile != null) {
+      setState(() {
+        _tempImage = imageFile;
+      });
+      return true;
+    } else {
+      return false;
+    }
+
   }
 
   /*

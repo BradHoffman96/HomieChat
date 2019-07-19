@@ -80,6 +80,8 @@ class UserService {
         _persistenceService.storeKey("LOGGED_IN", false);
         _persistenceService.deleteKey("TOKEN");
         _persistenceService.deleteKey("USER");
+
+        _user.image.deleteSync();
       }
     } else {
       print(logoutResponse.body);
@@ -118,15 +120,37 @@ class UserService {
     if (!getImageResponse.hasError) {
       var documentDir = await getApplicationDocumentsDirectory();
 
-      print(_user);
-      var id = _user.id;
+      var path = join(documentDir.path, '${_user.id}-profile.png');
+      print(path);
 
-      File file = new File(join(documentDir.path, '$id-profile.png'));
+      File file = new File(path);
+
+      if (file.existsSync()) {
+        file.deleteSync();
+      }
+
       file.writeAsBytesSync(getImageResponse.bodyBytes);
       _user.image = file;
+    } else {
+      print("GET IMAGE");
+      print(getImageResponse.body);
     }
 
+
     return !getImageResponse.hasError;
+  }
+
+  Future<bool> updateProfile() async {
+    var updateProfileResponse = await _webService.updateProfile(_user.displayName, _user.image);
+
+    if (!updateProfileResponse.hasError) {
+      print(updateProfileResponse.body);
+    } else {
+      print("UPDATE PROFILE: ${updateProfileResponse.body}");
+      //TOOD: cache request for later upload when network is better
+    }
+
+    return !updateProfileResponse.hasError;
   }
 
   /*Future<bool> getImageFromGallery() async {

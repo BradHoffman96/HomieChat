@@ -40,6 +40,7 @@ class WebService {
   String logoutEndpoint = "/auth/logout";
   String getUserEndpoint = "/profile";
   String getUserImageEndpoint = "/profile/image";
+  String updateProfileEndpoint = "/profile";
 
   Future<WebServiceResponse> register({
     @required String email,
@@ -94,6 +95,19 @@ class WebService {
     var uri = _getUri(getUserImageEndpoint).toString();
 
     var response = await _performHttpRequest(verb: HttpRequest.Get, uri: uri, requiresAuthToken: true);
+
+    return WebServiceResponse.fromHttpResponse(response);
+  }
+
+  Future<WebServiceResponse> updateProfile(String displayName, File image) async {
+    var uri = _getUri(updateProfileEndpoint).toString();
+
+    var body = {
+      'display_name': displayName,
+      'image': base64Encode(image.readAsBytesSync())
+    };
+
+    var response = await _performHttpRequest(verb: HttpRequest.Post, uri: uri, body: json.encode(body), requiresAuthToken: true);
 
     return WebServiceResponse.fromHttpResponse(response);
   }
