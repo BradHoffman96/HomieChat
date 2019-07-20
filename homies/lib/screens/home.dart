@@ -36,65 +36,97 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<bool> getInitialData(HomeModel model) async {
+    var result = await model.getUserDetails();
+    result = await model.getUserImage();
+    result = await model.getGroupDetails();
+    result = await model.getGroupImage();
+    result = await model.getGroupMembers();
+
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeModel>(
-      builder: (context, child, model) => Scaffold(
-        appBar: AppBar(title: Text("HOMIE CHAT")),
-        endDrawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                child: Text('HOMIE CHAT'),
-                decoration: BoxDecoration(
-                  color: Colors.blue
-                ),
-              ),
-              ListTile(
-                title: Text('Profile'),
-                onTap: () {
-                  print("Profile");
-                  Navigator.of(context).pop();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-                },
-              ),
-              ListTile(
-                title: Text("Gallery"),
-                onTap: () {
-                  print("Gallery");
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: Text("Settings"),
-                onTap: () {
-                  print("Settings");
-                  Navigator.of(context).pop();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
-                },
-              )
-            ],
-          )
-        ),
-        body: Column(
+      builder: (context, child, model) => FutureBuilder(
+          future: getInitialData(model),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+              case ConnectionState.active:
+                return CircularProgressIndicator();
+                break;
+              case ConnectionState.done:
+                if (snapshot.hasData) {
+                  if (snapshot.data) {
+                    return _homeView(model);
+                  }
+                }
+            }
+          } 
+        
+      ),
+    );
+  }
+
+  Widget _homeView(HomeModel model) {
+    return Scaffold(
+      appBar: AppBar(title: Text("HOMIE CHAT")),
+      endDrawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
           children: <Widget>[
-            Flexible(
-              child: ListView.builder(
-                padding: EdgeInsets.all(8.0),
-                reverse: true,
-                itemBuilder: (_, int index) => _messages[index],
-                itemCount: _messages.length,
-              )
+            DrawerHeader(
+              child: Text('HOMIE CHAT'),
+              decoration: BoxDecoration(
+                color: Colors.blue
+              ),
             ),
-            new Divider(height: 1.0),
-            Container(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-              decoration: BoxDecoration(color: Theme.of(context).cardColor),
-              child: _buildTextComposer(),
+            ListTile(
+              title: Text('Profile'),
+              onTap: () {
+                print("Profile");
+                Navigator.of(context).pop();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+              },
+            ),
+            ListTile(
+              title: Text("Gallery"),
+              onTap: () {
+                print("Gallery");
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              title: Text("Settings"),
+              onTap: () {
+                print("Settings");
+                Navigator.of(context).pop();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+              },
             )
           ],
-        ),
+        )
+      ),
+      body: Column(
+        children: <Widget>[
+          Flexible(
+            child: ListView.builder(
+              padding: EdgeInsets.all(8.0),
+              reverse: true,
+              itemBuilder: (_, int index) => _messages[index],
+              itemCount: _messages.length,
+            )
+          ),
+          new Divider(height: 1.0),
+          Container(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+            decoration: BoxDecoration(color: Theme.of(context).cardColor),
+            child: _buildTextComposer(),
+          )
+        ],
       ),
     );
   }
