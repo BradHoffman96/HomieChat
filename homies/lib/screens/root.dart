@@ -1,7 +1,10 @@
+import 'package:async/async.dart';
 import "package:flutter/material.dart";
 import 'package:homies/screens/home.dart';
 import 'package:homies/screens/login.dart';
+import 'package:homies/services/group_service.dart';
 import 'package:homies/services/persistence_service.dart';
+import 'package:homies/services/user_service.dart';
 
 import '../service_locator.dart';
 
@@ -11,12 +14,16 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
+  AsyncMemoizer _memoizer = AsyncMemoizer();
   PersistenceService _persistenceService = locator<PersistenceService>();
+  UserService _userService = locator<UserService>();
+  GroupService _groupService = locator<GroupService>();
 
   Future<bool> _checkPreferences() async {
     bool loggedIn = await _persistenceService.getKey("LOGGED_IN");
 
     if (loggedIn != null) {
+
       return loggedIn;
     } else {
       print("LOGGED_IN does not exist.");
@@ -24,6 +31,13 @@ class _RootPageState extends State<RootPage> {
       _persistenceService.storeKey("LOGGED_IN", false);
       return false;
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
   }
 
   @override

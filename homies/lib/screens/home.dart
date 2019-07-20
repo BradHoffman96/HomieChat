@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:async/async.dart';
 import "package:flutter/material.dart";
+import 'package:homies/models/user.dart';
 import 'package:homies/scoped_models/home_model.dart';
 import 'package:homies/service_locator.dart';
 import 'package:homies/services/group_service.dart';
@@ -17,27 +19,15 @@ import 'base_view.dart';
 
  
 class HomePage extends StatefulWidget {
-  final UserService _userService = locator<UserService>();
-  final GroupService _groupService = locator<GroupService>();
-
   @override
   _HomePageState createState() {
-    getInitialData();
     return _HomePageState();
-  }
-
-  Future<bool> getInitialData() async {
-    var result = await _userService.getUser();
-    result = await _userService.getUserImage();
-    result = await _groupService.getGroupDetails();
-    result = await _groupService.getGroupImage();
-    result = await _groupService.getGroupMembers();
-
-    return result;
   }
 }
 
 class _HomePageState extends State<HomePage> {
+  final UserService _userService = locator<UserService>();
+  final GroupService _groupService = locator<GroupService>();
   final TextEditingController _textEditingController = new TextEditingController();
   final List<ChatMessage> _messages = <ChatMessage>[];
   File _media;
@@ -51,6 +41,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeModel>(
+      onModelReady: (model) => model.getInitialData(),
       builder: (context, child, model) => _homeView(model)
           /*builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {

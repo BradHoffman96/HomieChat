@@ -10,6 +10,18 @@ class HomeModel extends BaseModel {
   UserService _userService = locator<UserService>();
   GroupService _groupService = locator<GroupService>();
 
+  Future getInitialData() async {
+    setState(ViewState.Busy);
+
+    await _userService.getUser();
+    await _userService.getUserImage();
+    await _groupService.getGroupDetails();
+    await _groupService.getGroupImage();
+    await _groupService.getGroupMembers();
+
+    setState(ViewState.Success);
+  }
+
   Future<bool> getGroupDetails() async {
     setState(ViewState.Busy);
 
@@ -49,7 +61,7 @@ class HomeModel extends BaseModel {
   Future<bool> getUserDetails() async {
     setState(ViewState.Busy);
 
-    var result = await _userService.getUserImage();
+    var result = await _userService.getUser();
 
     var loginState = result ? ViewState.Success : ViewState.Error;
 

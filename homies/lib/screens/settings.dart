@@ -59,20 +59,19 @@ class _SettingsPageState extends State<SettingsPage> {
               child: this.isEditing ? Text("FINISH", style: TextStyle(color: Colors.white, fontSize: 16.0),)
                 : Text("EDIT", style: TextStyle(color: Colors.white, fontSize: 16.0)),
               onPressed: () async {
-                _groupService.currentGroup.name = _tempName;
-                _groupService.currentGroup.topic = _tempTopic;
-                _groupService.currentGroup.image = _tempImage;
-                await model.updateGroup();
+                if (this.isEditing) {
+                  _groupService.currentGroup.name = _tempName;
+                  _groupService.currentGroup.topic = _tempTopic;
+                  _groupService.currentGroup.image = _tempImage;
 
-                setState(() {
-                  if (this.isEditing) {
-                      if (model.state == ViewState.Success) {
-                        this.isEditing = false;
-                      }
-                  } else {
-                    this.isEditing = true;
+                  await model.updateGroup();
+
+                  if (model.state == ViewState.Success) {
+                    setState(() => this.isEditing = false);
                   }
-                });
+                } else {
+                  setState(() => this.isEditing = true);
+                }
               },
             )
           ],
