@@ -160,18 +160,19 @@ router.get("/:id/image", passport.authenticate('jwt', {session: false}), functio
 router.get("/:id/members", passport.authenticate('jwt', {session: false}), function(req, res) {
   var groupId = req.params.id;
 
-  Group.findById(groupId, function(err, group) {
+  Group.findById(groupId, async function(err, group) {
     if (err) throw err;
+    console.log(group);
 
     var users = [];
-    for (let userId in group.members) {
-      User.findById(userId, function(err, user) {
+    for (let userId of group.users) {
+      await User.findById(userId, function(err, user) {
         if (err) throw err;
 
         if (user) {
-          console.log(user.id);
-          user.password = undefined;
-          users.push(user);
+          var tempUser = user;
+          tempUser.password = undefined;
+          users.push(tempUser);
         }
       });
     }
