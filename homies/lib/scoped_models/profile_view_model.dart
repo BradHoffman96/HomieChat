@@ -15,7 +15,19 @@ class ProfileModel extends BaseModel {
 
     setState(logoutState);
     
-    return true;
+    return result;
+  }
+
+  Future<bool> updateProfile() async {
+    setState(ViewState.Busy);
+
+    var result = await _userService.updateProfile();
+
+    var updateState = result ? ViewState.Success : ViewState.Error;
+
+    setState(updateState);
+
+    return result;
   }
 
 }

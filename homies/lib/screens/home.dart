@@ -2,6 +2,9 @@ import 'dart:io';
 
 import "package:flutter/material.dart";
 import 'package:homies/scoped_models/home_model.dart';
+import 'package:homies/service_locator.dart';
+import 'package:homies/services/group_service.dart';
+import 'package:homies/services/user_service.dart';
 import "package:image_picker/image_picker.dart";
 
 import 'package:homies/screens/profile.dart';
@@ -18,6 +21,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final UserService _userService = locator<UserService>();
+  final GroupService _groupService = locator<GroupService>();
   final TextEditingController _textEditingController = new TextEditingController();
   final List<ChatMessage> _messages = <ChatMessage>[];
   File _media;
@@ -36,22 +41,31 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<bool> getInitialData(HomeModel model) async {
-    var result = await model.getUserDetails();
-    result = await model.getUserImage();
-    result = await model.getGroupDetails();
-    result = await model.getGroupImage();
-    result = await model.getGroupMembers();
+  Future<bool> getInitialData() async {
+    var result = await _userService.getUser();
+    result = await _userService.getUserImage();
+    result = await _groupService.getGroupDetails();
+    result = await _groupService.getGroupImage();
+    print("CALL GET MEMBERS");
+    result = await _groupService.getGroupMembers();
+    print("GOT MEMBERS: $result");
 
     return result;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeModel>(
       builder: (context, child, model) => FutureBuilder(
-          future: getInitialData(model),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
+          future: getInitialData(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) => _homeView(model)
+          /*builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.waiting:
@@ -64,8 +78,10 @@ class _HomePageState extends State<HomePage> {
                     return _homeView(model);
                   }
                 }
+
+                return Container();
             }
-          } 
+          } */
         
       ),
     );

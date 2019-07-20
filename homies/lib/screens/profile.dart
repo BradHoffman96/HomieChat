@@ -64,18 +64,18 @@ class _ProfilePageState extends State<ProfilePage> {
               child: this.isEditing ? Text("FINISH", style: TextStyle(color: Colors.white, fontSize: 16.0),)
                 : Text("EDIT", style: TextStyle(color: Colors.white, fontSize: 16.0)),
               onPressed: () {
-                setState(() {
+                setState(() async {
                   if (this.isEditing) {
                     //TODO: commit changes to local and network
-                    setState(() {
+                    _userService.currentUser.image = _tempImage;
+                    _userService.currentUser.displayName = _tempDisplayName;
+
+                    await model.updateProfile();
+                    if (model.state == ViewState.Success) {
                       this.isEditing = false;
-
-                      _userService.currentUser.image = _tempImage;
-                      _userService.currentUser.displayName = _tempDisplayName;
-
-                      _userService.updateProfile();
-                    });
-
+                    } else {
+                      //TODO: retry the request???
+                    }
                   } else {
                     this.isEditing = true;
                   }
@@ -141,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   )                            
                                 ),
                                 onTap: () async {
-                                  showMediaSlector();
+                                  showMediaSelector();
                                 },
                               ) : Container(width: 0, height: 0),
                             );
@@ -201,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  showMediaSlector() {
+  showMediaSelector() {
     showModalBottomSheet(context: context, builder: (BuildContext context) {
       return new Column(
         mainAxisSize: MainAxisSize.min,

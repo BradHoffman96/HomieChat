@@ -87,6 +87,7 @@ class GroupService {
 
     if (!getMembersResponse.hasError) {
       var result = json.decode(getMembersResponse.body);
+      print(result);
 
       for (var item in result['users']) {
         User user = User.fromJson(item);
