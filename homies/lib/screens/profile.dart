@@ -64,18 +64,13 @@ class _ProfilePageState extends State<ProfilePage> {
               child: this.isEditing ? Text("FINISH", style: TextStyle(color: Colors.white, fontSize: 16.0),)
                 : Text("EDIT", style: TextStyle(color: Colors.white, fontSize: 16.0)),
               onPressed: () {
-                setState(() async {
+                setState(() {
                   if (this.isEditing) {
                     //TODO: commit changes to local and network
                     _userService.currentUser.image = _tempImage;
                     _userService.currentUser.displayName = _tempDisplayName;
 
-                    await model.updateProfile();
-                    if (model.state == ViewState.Success) {
-                      this.isEditing = false;
-                    } else {
-                      //TODO: retry the request???
-                    }
+                    _updateProfile(model);
                   } else {
                     this.isEditing = true;
                   }
@@ -180,6 +175,15 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+  _updateProfile(ProfileModel model) async {
+    await model.updateProfile();
+    if (model.state == ViewState.Success) {
+      this.isEditing = false;
+    } else {
+      //TODO: retry the request???
+    }
   }
 
   Widget _getFeedbackUI(ProfileModel model) {

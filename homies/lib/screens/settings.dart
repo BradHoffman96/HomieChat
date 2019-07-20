@@ -58,15 +58,14 @@ class _SettingsPageState extends State<SettingsPage> {
             FlatButton(
               child: this.isEditing ? Text("FINISH", style: TextStyle(color: Colors.white, fontSize: 16.0),)
                 : Text("EDIT", style: TextStyle(color: Colors.white, fontSize: 16.0)),
-              onPressed: () {
-                setState(() async {
-                  if (this.isEditing) {
-                    //TODO: commit changes to local and network
-                      _groupService.currentGroup.name = _tempName;
-                      _groupService.currentGroup.topic = _tempTopic;
-                      _groupService.currentGroup.image = _tempImage;
+              onPressed: () async {
+                _groupService.currentGroup.name = _tempName;
+                _groupService.currentGroup.topic = _tempTopic;
+                _groupService.currentGroup.image = _tempImage;
+                await model.updateGroup();
 
-                      await model.updateGroup();
+                setState(() {
+                  if (this.isEditing) {
                       if (model.state == ViewState.Success) {
                         this.isEditing = false;
                       }

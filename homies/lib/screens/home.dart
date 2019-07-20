@@ -46,9 +46,7 @@ class _HomePageState extends State<HomePage> {
     result = await _userService.getUserImage();
     result = await _groupService.getGroupDetails();
     result = await _groupService.getGroupImage();
-    print("CALL GET MEMBERS");
     result = await _groupService.getGroupMembers();
-    print("GOT MEMBERS: $result");
 
     return result;
   }
