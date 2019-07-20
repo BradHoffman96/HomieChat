@@ -20,6 +20,18 @@ class GroupService {
 
   Group get currentGroup => _group;
 
+  Future<bool> updateGroupDetails() async {
+    var updateGroupResponse = await _webService.updateGroupDetails(groupId: _group.id, name: _group.name, topic: _group.topic, image: _group.image);
+
+    if (!updateGroupResponse.hasError) {
+      print(updateGroupResponse.body);
+    } else {
+      print("UPDATE PROFILE: ${updateGroupResponse.body}");
+    }
+
+    return !updateGroupResponse.hasError;
+  }
+
   Future<bool> getGroupDetails() async {
     var getDetailsResponse = await _webService.getGroupDetails(_userService.currentUser.groups[0]);
 
