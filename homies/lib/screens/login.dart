@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
 
                         await model.login(email: email, password: password);
                         if (model.state == ViewState.Success) {
-                          Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+                          Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
                         }
 
                         this.emailTextEditingController.clear();

@@ -15,30 +15,15 @@ import "../items/message.dart";
 import "../items/image.dart";
 import 'base_view.dart';
 
+ 
 class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   final UserService _userService = locator<UserService>();
   final GroupService _groupService = locator<GroupService>();
-  final TextEditingController _textEditingController = new TextEditingController();
-  final List<ChatMessage> _messages = <ChatMessage>[];
-  File _media;
 
-  Future<bool> getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    if (image == null) {
-      return false;
-    } else {
-      setState(() {
-        _media = image;
-      });
-
-      return true;
-    }
+  @override
+  _HomePageState createState() {
+    getInitialData();
+    return _HomePageState();
   }
 
   Future<bool> getInitialData() async {
@@ -50,13 +35,17 @@ class _HomePageState extends State<HomePage> {
 
     return result;
   }
+}
+
+class _HomePageState extends State<HomePage> {
+  final TextEditingController _textEditingController = new TextEditingController();
+  final List<ChatMessage> _messages = <ChatMessage>[];
+  File _media;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    getInitialData();
   }
 
   @override

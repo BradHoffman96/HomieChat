@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:homies/services/group_service.dart';
 import 'package:homies/services/user_service.dart';
 
 import '../service_locator.dart';
@@ -7,16 +8,12 @@ import 'base_model.dart';
 
 class RegisterModel extends BaseModel {
   UserService _userService = locator<UserService>();
+  GroupService _groupService = locator<GroupService>();
 
   Future<bool> register({String email, String password, String displayName, File image}) async {
     setState(ViewState.Busy);
 
     var result = await _userService.registerUser(email: email, password: password, displayName: displayName, image: image);
-
-    if (result) {
-      result = await _userService.getUser();
-      result = await _userService.getUserImage();
-    }
 
     var loginState = result ? ViewState.Success : ViewState.Error;
 
