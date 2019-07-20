@@ -3,6 +3,7 @@ import 'package:homies/scoped_models/home_model.dart';
 import 'package:homies/scoped_models/login_view_model.dart';
 import 'package:homies/scoped_models/profile_view_model.dart';
 import 'package:homies/scoped_models/register_view_model.dart';
+import 'package:homies/services/group_service.dart';
 import 'package:homies/services/persistence_service.dart';
 import 'package:homies/services/user_service.dart';
 import 'package:homies/services/web_service.dart';
@@ -12,6 +13,7 @@ GetIt locator = new GetIt();
 Future setupLocator() async {
   locator.registerLazySingleton<WebService>(() => WebService());
   locator.registerLazySingleton<UserService>(() => UserService());
+  locator.registerLazySingleton<GroupService>(() => GroupService());
   //locator.registerLazySingleton<PersistenceService>(() => PersistenceService());
   
   var instance = await PersistenceService.getInstance();

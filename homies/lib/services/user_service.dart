@@ -95,11 +95,9 @@ class UserService {
 
     if (!getUserResponse.hasError) {
       var result = json.decode(getUserResponse.body);
-      print(result);
 
       if (result != null && result['success']) {
         var userFromLogin = User.fromJson(result['user']);
-        print(userFromLogin);
         
         if (userFromLogin != null) {
           _user = userFromLogin;

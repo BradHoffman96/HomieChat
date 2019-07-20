@@ -38,9 +38,16 @@ class WebService {
   String registerEndpoint = "/auth/register";
   String loginEndpoint = "/auth/login";
   String logoutEndpoint = "/auth/logout";
+
   String getUserEndpoint = "/profile";
   String getUserImageEndpoint = "/profile/image";
   String updateProfileEndpoint = "/profile";
+
+  String getGroupDetailsEndpoint = "/group";
+  //These don't contain group because the actual format is:
+  // /group/:id/endpoint to get the particular details of a group
+  String getGroupImageEndpoint = "/image";
+  String getGroupMembersEndpoint = "/members";
 
   Future<WebServiceResponse> register({
     @required String email,
@@ -104,6 +111,54 @@ class WebService {
 
     var body = {
       'display_name': displayName,
+      'image': base64Encode(image.readAsBytesSync())
+    };
+
+    var response = await _performHttpRequest(verb: HttpRequest.Post, uri: uri, body: json.encode(body), requiresAuthToken: true);
+
+    return WebServiceResponse.fromHttpResponse(response);
+  }
+
+  Future<WebServiceResponse> getGroupDetails(String groupId) async {
+    var url = getGroupDetailsEndpoint + "/$groupId";
+    var uri = _getUri(url).toString();
+
+    var response = await _performHttpRequest(verb: HttpRequest.Get, uri: uri, requiresAuthToken: true);
+
+    return WebServiceResponse.fromHttpResponse(response);
+  }
+
+  Future<WebServiceResponse> getGroupImage(String groupId) async {
+    var url = getGroupDetailsEndpoint + "/$groupId" + getGroupImageEndpoint;
+    var uri = _getUri(url).toString();
+
+    var response = await _performHttpRequest(verb: HttpRequest.Get, uri: uri, requiresAuthToken: true);
+
+    return WebServiceResponse.fromHttpResponse(response);
+  }
+
+  Future<WebServiceResponse> getGroupMembers(String groupId) async {
+    var url = getGroupDetailsEndpoint + "/$groupId" + getGroupMembersEndpoint;
+    var uri = _getUri(url).toString();
+
+    var response = await _performHttpRequest(verb: HttpRequest.Get, uri: uri, requiresAuthToken: true);
+
+    return WebServiceResponse.fromHttpResponse(response);
+  }
+
+  Future<WebServiceResponse> updateGroupDetails({
+    String groupId,
+    String name,
+    String topic,
+    File image
+    }) async {
+
+    var url = getGroupDetailsEndpoint + "/$groupId";
+    var uri = _getUri(url).toString();
+
+    var body = {
+      'name': name,
+      'topic': topic,
       'image': base64Encode(image.readAsBytesSync())
     };
 
