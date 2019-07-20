@@ -4,6 +4,7 @@ const router = require('express').Router();
 const jwt = require('jwt-simple');
 const multer = require('multer');
 const fs = require('fs');
+const path = require('path');
 
 const Group = require('../models/group.js');
 const User = require('../models/user.js');
@@ -168,6 +169,7 @@ router.get("/:id/members", passport.authenticate('jwt', {session: false}), funct
         if (err) throw err;
 
         if (user) {
+          console.log(user.id);
           user.password = undefined;
           users.push(user);
         }
