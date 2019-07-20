@@ -19,6 +19,7 @@ class Group extends Model {
       owner: data['owner'],
       name: data['name'],
       topic: data['topic'],
+      members: List<User>()
     );
 
 

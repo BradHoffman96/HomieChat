@@ -63,7 +63,7 @@ class GroupService {
     if (!getImageResponse.hasError) {
       Directory directory = await getApplicationDocumentsDirectory();
 
-      var path = join(directory.toString(), "$groupId-image.png");
+      var path = join(directory.path, '$groupId-image.png');
 
       File file = new File(path);
 

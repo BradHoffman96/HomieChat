@@ -57,14 +57,14 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    getInitialData();
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeModel>(
-      builder: (context, child, model) => FutureBuilder(
-          future: getInitialData(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) => _homeView(model)
+      builder: (context, child, model) => _homeView(model)
           /*builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
@@ -82,8 +82,6 @@ class _HomePageState extends State<HomePage> {
                 return Container();
             }
           } */
-        
-      ),
     );
   }
 
