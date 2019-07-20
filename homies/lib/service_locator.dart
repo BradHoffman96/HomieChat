@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:homies/scoped_models/group_model.dart';
 import 'package:homies/scoped_models/home_model.dart';
 import 'package:homies/scoped_models/login_view_model.dart';
 import 'package:homies/scoped_models/profile_view_model.dart';
@@ -23,4 +24,5 @@ Future setupLocator() async {
   locator.registerFactory<HomeModel>(() => HomeModel());
   locator.registerFactory<ProfileModel>(() => ProfileModel());
   locator.registerFactory<RegisterModel>(() => RegisterModel());
+  locator.registerFactory<GroupModel>(() => GroupModel());
 }
