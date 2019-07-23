@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homie_chat/core/models/group.dart';
 import 'package:homie_chat/core/models/user.dart';
 import 'package:homie_chat/core/viewmodels/views/home_view_model.dart';
 import 'package:homie_chat/ui/views/base_widget.dart';
@@ -8,8 +9,10 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseWidget<HomeViewModel>(
-      model: HomeViewModel(authenticationService: Provider.of(context)),
-      onModelReady: (model) => model.getUser(),
+      model: HomeViewModel(
+        authenticationService: Provider.of(context),
+        groupService: Provider.of(context)),
+      onModelReady: (model) => model.getInitialData(context),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(title: Text("HOMIE CHAT")),
         //TODO: break drawer into widget
@@ -49,7 +52,18 @@ class HomeView extends StatelessWidget {
             ],
           )
         ),*/
-        body: Text('${Provider.of<User>(context).email}'),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text('${Provider.of<User>(context).email}'),
+            Text('${Provider.of<Group>(context).name}'),
+            ListView.builder(
+              itemBuilder: (_, int index) => Text('${Provider.of<Group>(context).members[index]}'),
+              itemCount: Provider.of<Group>(context).members.length,
+            )
+          ],
+        ),
 
         //TODO: Replace body
         /*body: Column(

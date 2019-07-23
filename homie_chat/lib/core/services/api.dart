@@ -1,6 +1,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:homie_chat/core/models/group.dart';
 import 'package:homie_chat/core/models/user.dart';
 import 'package:homie_chat/core/services/storage.dart';
 import 'package:http/http.dart' as http;
@@ -15,6 +17,9 @@ class Api {
   static const loginEndpoint = "auth/login";
   static const registerEndpoint = "auth/register";
   static const getUserEndpoint = "profile";
+
+  static const getGroupEndpoint = "group";
+  static const getMembersEndpoint = "members";
 
   var baseHeaders = {
     "content-type": "application/json",
@@ -66,5 +71,46 @@ class Api {
     var response = await client.get('$baseUrl/$getUserEndpoint', headers: headers);
 
     return User.fromJson(json.decode(response.body)['user']);
+  }
+
+  Future<Group> getGroupDetails({@required String id}) async {
+    String token = await _storage.getKey("TOKEN");
+    var headers = {
+      'Authorization': token
+    };
+
+    headers.addAll(baseHeaders);
+
+    var response = await client.get('$baseUrl/$getGroupEndpoint/$id', headers: headers);
+
+    return Group.fromJson(json.decode(response.body)['group']);
+  }
+
+  Future<List<User>> getGroupMembers({@required String id}) async {
+    String token = await _storage.getKey("TOKEN");
+    var headers = {
+      'Authorization': token
+    };
+
+    headers.addAll(baseHeaders);
+
+    var response = await client.get('$baseUrl/$getGroupEndpoint/$id/$getMembersEndpoint', headers: headers);
+    var result = json.decode(response.body);
+
+    print(result);
+
+    if (result['success'] == false) {
+      print(result);
+      return null;
+    }
+
+    List<User> members = List<User>();
+    for (var item in result['members']) {
+      User user = User.fromJson(item);
+
+      members.add(user);
+    }
+
+    return members;
   }
 }

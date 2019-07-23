@@ -1,6 +1,8 @@
 
+import 'package:homie_chat/core/services/group_service.dart';
 import 'package:provider/provider.dart';
 
+import 'core/models/group.dart';
 import 'core/models/user.dart';
 import 'core/services/api.dart';
 import 'core/services/authentication_service.dart';
@@ -20,13 +22,20 @@ Future<Iterable<SingleChildCloneableWidget>> getProviders() async {
     ),
     ProxyProvider<Api, AuthenticationService>(
       builder: (context, api, authenticationService) =>
-          AuthenticationService(api: api),
+        AuthenticationService(api: api),
+    ),
+    ProxyProvider<Api, GroupService>(
+      builder: (context, api, groupService) =>
+        GroupService(api: api),
     )
   ];
 
   List<SingleChildCloneableWidget> uiConsumableProviders = [
     StreamProvider<User>(
       builder: (context) => Provider.of<AuthenticationService>(context, listen: false).user,
+    ),
+    StreamProvider<Group>(
+      builder: (context) => Provider.of<GroupService>(context, listen: false).group,
     )
   ];
 

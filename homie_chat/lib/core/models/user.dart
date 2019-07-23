@@ -18,7 +18,7 @@ class User {
   User.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     email = json['email'];
-    displayName = json['displayName'];
+    displayName = json['display_name'];
     groups = List<String>.from(json['groups'].cast<String>());
   }
 }
