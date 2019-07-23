@@ -146,20 +146,20 @@ router.get("/:id/members", passport.authenticate('jwt', {session: false}), funct
     if (err) throw err;
     console.log(group);
 
-    var users = [];
-    for (let userId of group.users) {
+    var members = [];
+    for (let userId of group.members) {
       await User.findById(userId, function(err, user) {
         if (err) throw err;
 
         if (user) {
           var tempUser = user;
           tempUser.password = undefined;
-          users.push(tempUser);
+          members.push(tempUser);
         }
       });
     }
 
-    res.status(200).json({success: true, users: users});
+    res.status(200).json({success: true, members: members});
   });
 });
 
