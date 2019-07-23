@@ -27,10 +27,10 @@ class Api {
     var body = {
       'email': email,
       'password': password,
-      'displayName': displayName
+      'display_name': displayName
     };
 
-    var response = await client.post('$baseUrl/$registerEndpoint', body: json.encode(body));
+    var response = await client.post('$baseUrl/$registerEndpoint', headers: baseHeaders, body: json.encode(body));
 
     return json.decode(response.body)['success'];
   }
