@@ -57,7 +57,7 @@ router.post("/register", /*createUser,*/ upload.single('image'), async function 
       if (err) throw err;
       console.log("User created");
 
-      if (!fs.existsSync('./images')) {
+      /*if (!fs.existsSync('./images')) {
         console.log("Creating images folder.");
         fs.mkdirSync('./images');
       }
@@ -77,10 +77,13 @@ router.post("/register", /*createUser,*/ upload.single('image'), async function 
 
 
         res.status(200).json({success: true, token: 'JWT ' + token});
-      });
+      });*/
+      if (user) {
+        const token = jwt.encode(user, config.secret);
+        res.status(200).json({success: true, token: 'JWT ' + token});
+      }
     });
   });
-
 });
 
 router.post("/login", (req, res) => {
