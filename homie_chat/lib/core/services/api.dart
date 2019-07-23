@@ -49,14 +49,16 @@ class Api {
     var result = json.decode(response.body);
     print(result);
 
+    print(_storage);
     _storage.storeKey("TOKEN", result['token']);
 
     return result['success'];
   }
 
   Future<User> getUserDetails() async {
+    String token = await _storage.getKey("TOKEN");
     var headers = {
-      'Authorization': _storage.getKey("TOKEN")
+      'Authorization': token
     };
     
     headers.addAll(baseHeaders);

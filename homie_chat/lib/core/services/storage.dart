@@ -23,13 +23,13 @@ class Storage {
 
   void storeKey<T>(String key, T value) async {
     if (value is String) {
-      _preferences.setString(key, value);
+      await _preferences.setString(key, value);
     } else if (value is bool) {
-      _preferences.setBool(key, value);
+      await _preferences.setBool(key, value);
     } else if (value is int) {
-      _preferences.setInt(key, value);
+      await _preferences.setInt(key, value);
     } else if (value is double) {
-      _preferences.setDouble(key, value);
+      await _preferences.setDouble(key, value);
     }
   }
 

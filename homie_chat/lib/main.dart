@@ -5,10 +5,18 @@ import 'package:provider/provider.dart';
 
 import 'core/constants/app_constants.dart';
 
-void main() => runApp(MyApp());
+Future main() async {
+  var providers = await getProviders();
+
+  runApp(MyApp(providers: providers));
+} 
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  final Iterable<SingleChildCloneableWidget> providers;
+
+  MyApp({this.providers});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
