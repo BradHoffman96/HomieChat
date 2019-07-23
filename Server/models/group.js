@@ -11,7 +11,7 @@ var GroupSchema = new Schema({
   },
   owner: {
     type: String,
-    required: true
+    //required: true
   },
   image_url: {
     type: String

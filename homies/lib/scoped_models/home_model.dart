@@ -6,7 +6,6 @@ import '../service_locator.dart';
 import 'base_model.dart';
 
 class HomeModel extends BaseModel {
-
   UserService _userService = locator<UserService>();
   GroupService _groupService = locator<GroupService>();
 

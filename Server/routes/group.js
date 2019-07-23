@@ -38,38 +38,20 @@ var upload = multer({
   }
 });
 
-router.post("/", passport.authenticate('jwt', {session:false}), function(req, res) {
-  console.log(req.user);
+router.post("/", /*passport.authenticate('jwt', {session:false}),*/ function(req, res) {
 
   const newGroup = new Group({
-    owner: req.user.id,
+    //owner: req.user.id,
     name: req.body.name,
     topic: req.body.topic,
-    members: [req.user.id]
+    members: []
   });
 
   newGroup.save(function(err, group) {
     if (err) throw err;
 
     if (group) {
-      User.findById(req.user.id, function(err, user) {
-        if (err) throw err;
-
-        if (user) {
-          user.groups.push(group._id);
-          user.save(function(err, newUser) {
-            if (err) throw err;
-
-            if (newUser) {
-              res.status(200).json({success: true, msg: "Group created.", id: group._id});
-            } else {
-              res.status(400).json({success: false, msg: "Error saving group to user."});
-            }
-          });
-        } else {
-          res.status(400).json({success: false, msg: "Error finding user."});
-        }
-      });
+      res.status(200).json({success: true, msg: "Group created.", id: group._id});
     } else {
       res.status(400).json({success: false, msg: "Error creating group."});
     }
