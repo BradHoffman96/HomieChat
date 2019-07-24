@@ -109,11 +109,29 @@ router.post("/:id", passport.authenticate('jwt', {session: false}), function(req
 router.get("/:id", passport.authenticate('jwt', {session: false}), function (req, res) {
   var groupId = req.params.id;
 
-  Group.findById(groupId, function(err, group) {
+  Group.findById(groupId, async function(err, group) {
     if (err) throw err;
 
     if (group) {
-      res.status(200).json({success: true, group: group});
+
+      var members = [];
+      for (let userId of group.members) {
+        await User.findById(userId, function(err, user) {
+          if (err) throw err;
+
+          if (user) {
+            var tempUser = user;
+            tempUser.password = undefined;
+            members.push(tempUser);
+          }
+        });
+      }
+  
+      var tempGroup = group.toObject();
+      tempGroup.members = members;
+      console.log(tempGroup);
+
+      res.status(200).json({success: true, group: tempGroup});
     } else {
       res.status(400).json({success: false, msg: "Something went wrong getting group."});
     }
@@ -146,18 +164,6 @@ router.get("/:id/members", passport.authenticate('jwt', {session: false}), funct
     if (err) throw err;
     console.log(group);
 
-    var members = [];
-    for (let userId of group.members) {
-      await User.findById(userId, function(err, user) {
-        if (err) throw err;
-
-        if (user) {
-          var tempUser = user;
-          tempUser.password = undefined;
-          members.push(tempUser);
-        }
-      });
-    }
 
     res.status(200).json({success: true, members: members});
   });
