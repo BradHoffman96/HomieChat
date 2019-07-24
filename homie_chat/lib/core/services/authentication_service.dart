@@ -29,6 +29,12 @@ class AuthenticationService {
     return success;
   }
 
+  Future<bool> logout() async {
+    var success = await _api.logoutUser();
+
+    return success;
+  }
+
   Future<bool> getUser() async {
     var userDetails = await _api.getUserDetails();
 

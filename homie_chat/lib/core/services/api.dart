@@ -15,6 +15,7 @@ class Api {
   static const baseUrl = "http://127.0.0.1:3000";
 
   static const loginEndpoint = "auth/login";
+  static const logoutEndpoint = "auth/logout";
   static const registerEndpoint = "auth/register";
   static const getUserEndpoint = "profile";
   static const updateUserEndpoint = "profile";
@@ -54,10 +55,26 @@ class Api {
     
     //TODO: store the token
     var result = json.decode(response.body);
-    print(result);
 
-    print(_storage);
     _storage.storeKey("TOKEN", result['token']);
+
+    return result['success'];
+  }
+
+  Future<bool> logoutUser() async {
+    String token = await _storage.getKey("TOKEN");
+    var headers = {
+      'Authorization': token
+    };
+    
+    headers.addAll(baseHeaders);
+
+    var response = await client.get('$baseUrl/$logoutEndpoint', headers: headers);
+    var result = json.decode(response.body);
+
+    if (result['success']) {
+      _storage.deleteKey("TOKEN");
+    }
 
     return result['success'];
   }

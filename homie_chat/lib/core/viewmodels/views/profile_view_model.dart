@@ -31,9 +31,12 @@ class ProfileModel extends BaseModel {
     return success;
   }
 
-  Future<bool> logout() {
+  Future<bool> logout() async {
+    setBusy(true);
 
-    //TODO: logout User
+    var success = await _authenticationService.logout();
 
+    setBusy(false);
+    return success;
   }
 }

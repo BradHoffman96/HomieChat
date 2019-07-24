@@ -35,10 +35,4 @@ class GroupSettingsModel extends BaseModel {
 
     return success;
   }
-
-  Future<bool> logout() {
-
-    //TODO: logout User
-
-  }
 }

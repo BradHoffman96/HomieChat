@@ -28,6 +28,8 @@ class RootViewModel extends BaseModel {
       hasUser = await _authenticationService.getUser();
 
       //TODO: potentially add the getGroup functions in here, but I want to try something first.
+    } else {
+      hasUser = false;
     }
     setBusy(false);
 
