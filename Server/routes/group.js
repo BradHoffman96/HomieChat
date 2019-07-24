@@ -9,34 +9,23 @@ const path = require('path');
 const Group = require('../models/group.js');
 const User = require('../models/user.js');
 
-var storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    console.log(req.body);
-    if (!fs.existsSync('./images')) {
-      console.log("Creating images folder.");
-      fs.mkdirSync('./images');
-    }
+var getGroupMembers = async function(group) {
 
-    var dir = "./images/" + req.params.id;
-    if (!fs.existsSync(dir)) {
-      console.log("Creating dir:" + dir);
-      fs.mkdirSync(dir);
-    }
+  var members = [];
+  for (let userId of group.members) {
+    await User.findById(userId, function(err, user) {
+      if (err) throw err;
 
-    cb(null, dir);
-  },
-  filename: function(req, file, cb) {
-    cb(null, "group.jpg");
+      if (user) {
+        var tempUser = user;
+        tempUser.password = undefined;
+        members.push(tempUser);
+      }
+    });
   }
-});
-
-var upload = multer({
-  storage: storage,
-  onError: function(err, next) {
-    console.log(err);
-    next(err);
-  }
-});
+  
+  return members;
+}
 
 router.post("/", /*passport.authenticate('jwt', {session:false}),*/ function(req, res) {
 
@@ -76,6 +65,7 @@ router.post("/:id", passport.authenticate('jwt', {session: false}), function(req
       group.save(function(err, newGroup) {
         if (err) throw err;
 
+        /*
         if (!fs.existsSync('./images')) {
           console.log("Creating images folder.");
           fs.mkdirSync('./images');
@@ -99,6 +89,18 @@ router.post("/:id", passport.authenticate('jwt', {session: false}), function(req
             return res.status(400).json({success: false, msg: "Something went wrong."});
           }
         });
+        */
+
+        if (newGroup) {
+          var members = getGroupMembers(newGroup);
+
+          var tempGroup = newGroup.toObject();
+          tempGroup.members = members;
+
+          return res.status(200).json({success: true, msg: "Group successfully updated.", newGroup: tempGroup});
+        } else {
+          return res.status(400).json({success: false, msg: "Something went wrong."});
+        }
       });
     } else {
       res.status(400).json({success: false, msg: "Could not find group."});
@@ -109,24 +111,12 @@ router.post("/:id", passport.authenticate('jwt', {session: false}), function(req
 router.get("/:id", passport.authenticate('jwt', {session: false}), function (req, res) {
   var groupId = req.params.id;
 
-  Group.findById(groupId, async function(err, group) {
+  Group.findById(groupId, function(err, group) {
     if (err) throw err;
 
     if (group) {
-
-      var members = [];
-      for (let userId of group.members) {
-        await User.findById(userId, function(err, user) {
-          if (err) throw err;
-
-          if (user) {
-            var tempUser = user;
-            tempUser.password = undefined;
-            members.push(tempUser);
-          }
-        });
-      }
-  
+      var members = getGroupMembers(group);
+        
       var tempGroup = group.toObject();
       tempGroup.members = members;
       console.log(tempGroup);
