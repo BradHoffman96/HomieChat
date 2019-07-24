@@ -3,6 +3,7 @@ import 'package:homie_chat/core/models/group.dart';
 import 'package:homie_chat/core/models/user.dart';
 import 'package:homie_chat/core/viewmodels/views/home_view_model.dart';
 import 'package:homie_chat/ui/views/base_widget.dart';
+import 'package:homie_chat/ui/widgets/menu_drawer.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatelessWidget {
@@ -21,6 +22,7 @@ class HomeView extends StatelessWidget {
       },
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(title: Text("HOMIE CHAT")),
+        endDrawer: MenuDrawer(),
         body: Column(
           children: <Widget>[
             model.busy
