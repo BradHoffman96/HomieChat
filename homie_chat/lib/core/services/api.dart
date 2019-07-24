@@ -17,6 +17,7 @@ class Api {
   static const loginEndpoint = "auth/login";
   static const registerEndpoint = "auth/register";
   static const getUserEndpoint = "profile";
+  static const updateUserEndpoint = "profile";
 
   static const getGroupEndpoint = "group";
   static const getMembersEndpoint = "members";
@@ -71,6 +72,23 @@ class Api {
     var response = await client.get('$baseUrl/$getUserEndpoint', headers: headers);
 
     return User.fromJson(json.decode(response.body)['user']);
+  }
+
+  Future<User> updateUserDetails({@required User user}) async {
+    String token = await _storage.getKey("TOKEN");
+    var headers = {
+      'Authorization': token
+    };
+
+    headers.addAll(baseHeaders);
+
+    var body = {
+      'display_name': user.displayName
+    };
+
+    var response = await client.post('$baseUrl/$updateUserEndpoint', headers: headers, body: json.encode(body));
+
+    return User.fromJson(json.decode(response.body)['newUser']);
   }
 
   Future<Group> getGroupDetails({@required String id}) async {

@@ -39,4 +39,15 @@ class AuthenticationService {
 
     return hasUser;
   }
+
+  Future<bool> updateUser({User user}) async {
+    var newUser = await _api.updateUserDetails(user: user);
+
+    var hasUser = newUser != null;
+    if (hasUser) {
+      _userController.add(newUser);
+    }
+
+    return hasUser;
+  }
 }
