@@ -28,12 +28,19 @@ class GroupService {
     return hasGroup;
   }
 
-  Future<bool> getGroupMembers({@required Group group}) async {
-    print("getGroupMembers() called");
-    var groupMembers = await _api.getGroupMembers(id: group.id);
+  Future<bool> updateGroup({@required Group group}) async {
+    var newGroup = await _api.updateGroupDetails(group: group);
 
-    print("GROUP MEMBERS");
-    print(groupMembers);
+    var hasGroup = newGroup != null;
+    if (hasGroup) {
+      _groupController.add(newGroup);
+    }
+
+    return hasGroup;
+  }
+
+  Future<bool> getGroupMembers({@required Group group}) async {
+    var groupMembers = await _api.getGroupMembers(id: group.id);
 
     var hasMembers = groupMembers != null;
     if (hasMembers) {
@@ -43,4 +50,5 @@ class GroupService {
 
     return hasMembers;
   }
+
 }

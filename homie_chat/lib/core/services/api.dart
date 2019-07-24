@@ -20,6 +20,7 @@ class Api {
   static const updateUserEndpoint = "profile";
 
   static const getGroupEndpoint = "group";
+  static const updateGroupEndpoint = "group";
   static const getMembersEndpoint = "members";
 
   var baseHeaders = {
@@ -104,6 +105,24 @@ class Api {
     var group = json.decode(response.body)['group'];
 
     return Group.fromJson(group);
+  }
+
+  Future<Group> updateGroupDetails({@required Group group}) async {
+    String token = await _storage.getKey("TOKEN");
+    var headers = {
+      'Authorization': token
+    };
+
+    headers.addAll(baseHeaders);
+
+    var body = {
+      "name": group.name,
+      "topic": group.topic
+    };
+
+    var response = await client.post('$baseUrl/$updateGroupEndpoint/${group.id}', headers: headers, body: json.encode(body));
+
+    return Group.fromJson(json.decode(response.body)['newGroup']);
   }
 
   Future<List<User>> getGroupMembers({@required String id}) async {

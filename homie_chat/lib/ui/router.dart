@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:homie_chat/core/constants/app_constants.dart';
+import 'package:homie_chat/ui/views/group_settings_view.dart';
 import 'package:homie_chat/ui/views/home_view.dart';
 import 'package:homie_chat/ui/views/login_view.dart';
 import 'package:homie_chat/ui/views/profile_view.dart';
@@ -20,10 +21,8 @@ class Router {
         return MaterialPageRoute(builder: (_) => RegisterView());
       case RoutePaths.Profile:
         return MaterialPageRoute(builder: (_) => ProfileView());
-      /*
       case RoutePaths.GroupSettings:
-        return MaterialPageRoute(builder: (_) => GroupView());
-      */
+        return MaterialPageRoute(builder: (_) => GroupSettingsView());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
