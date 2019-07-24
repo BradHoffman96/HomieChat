@@ -57,6 +57,7 @@ router.post('/', passport.authenticate("jwt", {session: false}), function(req, r
       user.save(function (err, newUser) {
         if (err) throw err;
 
+        /*
         if (!fs.existsSync('./images')) {
           console.log("Creating images folder.");
           fs.mkdirSync('./images');
@@ -80,6 +81,14 @@ router.post('/', passport.authenticate("jwt", {session: false}), function(req, r
             res.status(400).json({success: false, msg: "Something went wrong."});
           }
         });
+        */
+        if (newUser) {
+          newUser.password = undefined;
+          res.status(200).json({success: true, msg: "User successfully updated.", newUser: newUser});
+        } else {
+          res.status(400).json({success: false, msg: "Something went wrong."});
+        }
+
       });
     }
   });
