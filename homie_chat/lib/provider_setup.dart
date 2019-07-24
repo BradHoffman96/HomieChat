@@ -6,17 +6,17 @@ import 'core/models/group.dart';
 import 'core/models/user.dart';
 import 'core/services/api.dart';
 import 'core/services/authentication_service.dart';
-import 'core/services/storage.dart';
+import 'core/services/storage_service.dart';
 
 Future<Iterable<SingleChildCloneableWidget>> getProviders() async {
-  var storage = await Storage.getInstance();
+  var storage = await StorageService.getInstance();
 
   List<SingleChildCloneableWidget> independentServices = [
-    Provider<Storage>.value(value: storage)
+    Provider<StorageService>.value(value: storage)
   ];
 
   List<SingleChildCloneableWidget> dependentServices = [
-    ProxyProvider<Storage, Api>(
+    ProxyProvider<StorageService, Api>(
       builder: (context, storage, api) =>
         Api(storage: storage),
     ),

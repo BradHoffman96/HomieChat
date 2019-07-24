@@ -13,7 +13,6 @@ class GroupService {
   GroupService({Api api}) 
     : _api = api;
 
-
   StreamController<Group> _groupController = StreamController<Group>.broadcast();
 
   Stream<Group> get group => _groupController.stream;
@@ -29,21 +28,17 @@ class GroupService {
     return hasGroup;
   }
 
-  Future<bool> getGroupMembers({@required groupId}) async {
-    var _currentGroup = await group.first;
-
-    print("CURRENT GROUP");
-    print(_currentGroup.name);
-
-    var groupMembers = await _api.getGroupMembers(id: groupId);
+  Future<bool> getGroupMembers({@required Group group}) async {
+    print("getGroupMembers() called");
+    var groupMembers = await _api.getGroupMembers(id: group.id);
 
     print("GROUP MEMBERS");
     print(groupMembers);
 
     var hasMembers = groupMembers != null;
     if (hasMembers) {
-      _currentGroup.members = groupMembers;
-      _groupController.add(_currentGroup);
+      group.members = groupMembers;
+      _groupController.add(group);
     }
 
     return hasMembers;

@@ -57,7 +57,7 @@ class _RegisterViewState extends State<RegisterView> {
                     );
 
                     if (registerSuccess) {
-                      Navigator.pushNamed(context, RoutePaths.Home);
+                      Navigator.pushNamedAndRemoveUntil(context, RoutePaths.Root, (_) => false);
                     }
                   },
                 )

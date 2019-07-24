@@ -55,7 +55,7 @@ class _LoginViewState extends State<LoginView> {
           ), onPressed: () async {
             var loginSuccess = await model.login(email: _emailController.text, password: _passwordController.text);
             if (loginSuccess) {
-              Navigator.pushNamed(context, RoutePaths.Home);
+              Navigator.pushNamedAndRemoveUntil(context, RoutePaths.Root, (_) => false);
             }
 
             _emailController.clear();

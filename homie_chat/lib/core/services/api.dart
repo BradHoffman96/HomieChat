@@ -4,13 +4,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:homie_chat/core/models/group.dart';
 import 'package:homie_chat/core/models/user.dart';
-import 'package:homie_chat/core/services/storage.dart';
+import 'package:homie_chat/core/services/storage_service.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  final Storage _storage;
+  final StorageService _storage;
 
-  Api({Storage storage}) : _storage = storage;
+  Api({StorageService storage}) : _storage = storage;
 
   static const baseUrl = "http://127.0.0.1:3000";
 
@@ -83,7 +83,9 @@ class Api {
 
     var response = await client.get('$baseUrl/$getGroupEndpoint/$id', headers: headers);
 
-    return Group.fromJson(json.decode(response.body)['group']);
+    var group = json.decode(response.body)['group'];
+
+    return Group.fromJson(group);
   }
 
   Future<List<User>> getGroupMembers({@required String id}) async {
