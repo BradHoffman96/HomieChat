@@ -62,7 +62,7 @@ router.post("/:id", passport.authenticate('jwt', {session: false}), function(req
       group.name = req.body.name;
       group.topic = req.body.topic;
 
-      group.save(function(err, newGroup) {
+      group.save(async function(err, newGroup) {
         if (err) throw err;
 
         /*
@@ -92,10 +92,12 @@ router.post("/:id", passport.authenticate('jwt', {session: false}), function(req
         */
 
         if (newGroup) {
-          var members = getGroupMembers(newGroup);
+          var members = await getGroupMembers(newGroup);
 
           var tempGroup = newGroup.toObject();
           tempGroup.members = members;
+
+          console.log(tempGroup);
 
           return res.status(200).json({success: true, msg: "Group successfully updated.", newGroup: tempGroup});
         } else {
@@ -111,11 +113,11 @@ router.post("/:id", passport.authenticate('jwt', {session: false}), function(req
 router.get("/:id", passport.authenticate('jwt', {session: false}), function (req, res) {
   var groupId = req.params.id;
 
-  Group.findById(groupId, function(err, group) {
+  Group.findById(groupId, async function(err, group) {
     if (err) throw err;
 
     if (group) {
-      var members = getGroupMembers(group);
+      var members = await getGroupMembers(group);
         
       var tempGroup = group.toObject();
       tempGroup.members = members;
