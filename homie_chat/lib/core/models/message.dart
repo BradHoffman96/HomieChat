@@ -1,18 +1,20 @@
 import 'dart:io';
 
 class Message {
-  String userId;
   String id;
+  String senderId;
   String text;
+  int timestamp;
   //int likes;
-  File image;
+  //File image;
 
-  Message({this.userId, this.id, /*this.likes,*/ this.text});
+  Message({this.senderId, this.id, /*this.likes,*/ this.text, this.timestamp});
 
   Message.fromJson(Map<String, dynamic> json) {
-    userId = json['owner'];
+    senderId = json['sender'];
     id = json['_id'];
     text = json['text'];
+    timestamp = json['timestamp'];
 
     //Need to build a getImage() function for the messages
     //image = getImageFromServer()
