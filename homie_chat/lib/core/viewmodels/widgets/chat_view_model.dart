@@ -22,4 +22,13 @@ class ChatModel extends BaseModel {
 
   List<Message> messages; 
 
+  Future<bool> connectToSocket() async {
+    setBusy(true);
+
+    print("connecting to socket");
+    var result = await _messageService.connectToSocket();
+
+    setBusy(false);
+  }
+
 }
