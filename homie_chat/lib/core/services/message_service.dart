@@ -25,6 +25,9 @@ class MessageService {
     await socketIO.subscribe("get messsage", _getMessage);
     await socketIO.connect();
 
+    var messages = List<Message>();
+    _messagesController.add(messages);
+
     return true;
   }
 
