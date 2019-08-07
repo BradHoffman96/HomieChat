@@ -3,7 +3,9 @@ import 'package:homie_chat/core/models/group.dart';
 import 'package:homie_chat/core/models/user.dart';
 import 'package:homie_chat/core/viewmodels/views/home_view_model.dart';
 import 'package:homie_chat/ui/views/base_widget.dart';
+import 'package:homie_chat/ui/widgets/input_view.dart';
 import 'package:homie_chat/ui/widgets/menu_drawer.dart';
+import 'package:homie_chat/ui/widgets/message_view.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatelessWidget {
@@ -21,30 +23,25 @@ class HomeView extends StatelessWidget {
         //await model.getGroupMembers(_group);
       },
       builder: (context, model, child) => Scaffold(
-        appBar: AppBar(title: Text("HOMIE CHAT")),
+        appBar: AppBar(title: Text(_group.name)),
         endDrawer: MenuDrawer(),
         body: Column(
           children: <Widget>[
             model.busy
               ? Center(child: CircularProgressIndicator(),)
-              : _mainPage(_user, _group)
+              : _mainPage(child)
           ]
         ),
       ),
     );
   }
 
-  _mainPage(User user, Group group) {
+  _mainPage(Widget child) {
     return Flexible(
       child: ListView(
         children: <Widget>[
-          Text('${user.displayName}'),
-          Text('${group.name}'),
-          ListView.builder(
-            shrinkWrap: true,
-            itemBuilder: (_, int index) => Text('${group.members[index].displayName}'),
-            itemCount: group.members.length,
-          )
+          MessageView(),
+          InputView()
         ],
       ),
     );

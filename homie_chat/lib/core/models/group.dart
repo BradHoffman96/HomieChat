@@ -10,8 +10,9 @@ class Group {
   //String owner;
   String name;
   String topic;
-  List<User> members;
+  Map<String, User> members;
   File image;
+
 
   Group({this.id, this.name, this.topic, this.members});
 
@@ -21,11 +22,16 @@ class Group {
     id = data["_id"];
     name = data["name"];
     topic = data["topic"];
-    members = List<User>();
+    List<User> users = List<User>();
 
     for (Map<String, dynamic> item in data['members']) {
       User user = User.fromJson(item);
-      members.add(user);
+      users.add(user);
     }
+
+    members = new Map.fromIterable(users,
+      key: (item) => item.id,
+      value: (item) => item,
+    );
   }
 }

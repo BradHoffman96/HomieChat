@@ -40,20 +40,4 @@ class HomeViewModel extends BaseModel {
     return success;
   }
 
-  Future<bool> getGroupMembers(Group _group) async {
-    setBusy(true);
-
-    var success = false;
-    if (_group != null) {
-      print("_group is not null");
-      success = await _groupService.getGroupMembers(group: _group);
-      print("GET MEMBERS: $success");
-    } else {
-      print("_group is null");
-    }
-
-    setBusy(false);
-
-    return success;
-  }
 }

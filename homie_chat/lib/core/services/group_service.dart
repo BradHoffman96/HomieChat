@@ -39,16 +39,4 @@ class GroupService {
     return hasGroup;
   }
 
-  Future<bool> getGroupMembers({@required Group group}) async {
-    var groupMembers = await _api.getGroupMembers(id: group.id);
-
-    var hasMembers = groupMembers != null;
-    if (hasMembers) {
-      group.members = groupMembers;
-      _groupController.add(group);
-    }
-
-    return hasMembers;
-  }
-
 }

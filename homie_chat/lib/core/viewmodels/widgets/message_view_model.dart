@@ -5,13 +5,13 @@ import 'package:homie_chat/core/services/group_service.dart';
 import 'package:homie_chat/core/services/message_service.dart';
 import 'package:homie_chat/core/viewmodels/base_model.dart';
 
-class ChatModel extends BaseModel {
+class MessageViewModel extends BaseModel {
   final MessageService _messageService;
   final GroupService _groupService;
   //Might not need AuthenticationService
   final AuthenticationService _authenticationService;
 
-  ChatModel({
+  MessageViewModel({
     MessageService messageService,
     GroupService groupService,
     AuthenticationService authenticationService
@@ -29,6 +29,8 @@ class ChatModel extends BaseModel {
     var result = await _messageService.connectToSocket();
 
     setBusy(false);
+
+    return result;
   }
 
 }
