@@ -20,10 +20,11 @@ class MessageService {
   Stream<List<Message>> get messages => _messagesController.stream;
 
   Future<bool> connectToSocket() async {
-    socketIO = SocketIOManager().createSocketIO("http://127.0.0.1:3000", "/chat", socketStatusCallback: _socketStatus);
-    await socketIO.init();
-    await socketIO.subscribe("get messsage", _getMessage);
-    await socketIO.connect();
+    socketIO = SocketIOManager().createSocketIO("http://10.0.2.2:3000", "/", socketStatusCallback: _socketStatus);
+
+    socketIO.init();
+    socketIO.subscribe("get messsage", _getMessage);
+    socketIO.connect();
 
     var messages = List<Message>();
     _messagesController.add(messages);
