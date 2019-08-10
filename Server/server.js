@@ -29,8 +29,11 @@ server.on('connection', socket => {
   console.log("SOCKET CONNECTION");
 
   socket.on('message', message => {
+    console.log(message);
+    /*
     server.clients.forEach(client => {
       client.send(message);
     });
+    */
   });
 });
