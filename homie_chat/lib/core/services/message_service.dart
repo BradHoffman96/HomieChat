@@ -43,7 +43,7 @@ class MessageService {
 
     print(message.timestamp);
 
-    _messages.add(message);
+    _messages.insert(0, message);
     _messagesController.add(_messages);
   }
 
