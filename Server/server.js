@@ -35,12 +35,19 @@ server.on('connection', socket => {
     
     //TODO: Create new message, store it, send it to clients
     var json = JSON.parse(message);
-    
+
     var messageObj = Message({
       timestamp: Date(),
-      sender: json.sender,
-      text: json.text
+      sender: json.sender
     });
+
+    if (json['image']) {
+      messageObj.image = json['image'];
+    } else if (json['text']) {
+      messageObj.text = json['text'];
+    } else {
+      return res.status(400).json({success: false, msg: "Please send an 'image' or 'text'"});
+    }
 
     messageObj.save(function(err, newMessage) {
       if (err) throw err;
