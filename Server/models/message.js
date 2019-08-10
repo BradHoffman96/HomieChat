@@ -14,9 +14,11 @@ const MessageSchema = new Schema({
     type: String,
     required: true 
   },
+  image_url: String
+  /* NOT IMPLEMENTED YET
   likes: Number,
   likers: [String],
-  media_url: String
+  */
 });
 
 module.exports = mongoose.model('Messages', MessageSchema);
