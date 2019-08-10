@@ -34,6 +34,9 @@ class MessageService {
 
   Future<bool> sendMessage(String message) async {
     //TODO: Needs to be rewritten for WebSockets
+
+    _channel.sink.add(message);
+    return true;
   }
 
 }

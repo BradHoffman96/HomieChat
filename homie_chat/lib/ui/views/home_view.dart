@@ -31,19 +31,19 @@ class HomeView extends StatelessWidget {
               Center(child: CircularProgressIndicator(),)
           ]
         ) : Column(
-          children: _mainPage(),
+          children: _mainPage(_user),
         ),
       ),
     );
   }
 
-  _mainPage() {
+  _mainPage(User user) {
     return [
       Flexible(
         child: MessageView(),
       ),
       UIHelper.verticalSpaceSmall,
-      InputView()
+      InputView(user: user,)
     ];
   }
 }
