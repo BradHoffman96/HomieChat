@@ -10,11 +10,8 @@ const MessageSchema = new Schema({
     type: Date,
     required: true
   },
-  text: {
-    type: String,
-    required: true 
-  },
-  image_url: String
+  text: String,
+  image: String
   /* NOT IMPLEMENTED YET
   likes: Number,
   likers: [String],
