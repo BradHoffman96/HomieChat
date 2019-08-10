@@ -15,7 +15,6 @@ Future<Iterable<SingleChildCloneableWidget>> getProviders() async {
 
   List<SingleChildCloneableWidget> independentServices = [
     Provider<StorageService>.value(value: storage),
-    Provider<MessageService>.value(value: MessageService())
   ];
 
   List<SingleChildCloneableWidget> dependentServices = [
@@ -30,6 +29,10 @@ Future<Iterable<SingleChildCloneableWidget>> getProviders() async {
     ProxyProvider<Api, GroupService>(
       builder: (context, api, groupService) =>
         GroupService(api: api),
+    ),
+    ProxyProvider<Api, MessageService>(
+      builder: (context, api, messageService) =>
+        MessageService(api: api),
     )
   ];
 

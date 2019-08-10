@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:homie_chat/core/models/group.dart';
+import 'package:homie_chat/core/models/message.dart';
 import 'package:homie_chat/core/models/user.dart';
 import 'package:homie_chat/core/services/storage_service.dart';
 import 'package:http/http.dart' as http;
@@ -23,6 +24,8 @@ class Api {
   static const getGroupEndpoint = "group";
   static const updateGroupEndpoint = "group";
   static const getMembersEndpoint = "members";
+
+  static const getMessagesEndpoint = "chat";
 
   var baseHeaders = {
     "content-type": "application/json",
@@ -168,5 +171,31 @@ class Api {
     }
 
     return members;
+  }
+
+  Future<List<Message>> getMostRecentMessages() async {
+    String token = await _storage.getKey("TOKEN");
+    var headers = {
+      'Authorization': token
+    };
+
+    headers.addAll(baseHeaders);
+
+    var response = await client.get('$baseUrl/$getMessagesEndpoint', headers: headers);
+    var result = json.decode(response.body);
+
+    if (result['success'] == false) {
+      print(result);
+      return null;
+    }
+
+    List<Message> messages = List<Message>();
+    for (var item in result['messages']) {
+      Message message = Message.fromJson(item);
+
+      messages.add(message);
+    }
+
+    return messages;
   }
 }
