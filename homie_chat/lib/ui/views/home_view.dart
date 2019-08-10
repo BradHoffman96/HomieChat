@@ -23,7 +23,7 @@ class HomeView extends StatelessWidget {
         //await model.getGroupMembers(_group);
       },
       builder: (context, model, child) => Scaffold(
-        appBar: AppBar(title: Text(_group.name)),
+        appBar: AppBar(title: Text(model.busy ? "HOMIE CHAT" : _group.name)),
         endDrawer: MenuDrawer(),
         body: Column(
           children: <Widget>[
