@@ -31,13 +31,11 @@ class MessageView extends StatelessWidget {
   Widget _messageView(BuildContext context, MessageViewModel model, Group group) {
     double c_width = MediaQuery.of(context).size.width * 0.8;
 
-    List<Message> _messages = Provider.of<List<Message>>(context);
-
     return ListView.builder(
       padding: EdgeInsets.all(8.0),
       reverse: true,
       itemBuilder: (_, int index) {
-        Message message = _messages[index];
+        Message message = model.messages[index];
         User author = group.members[message.senderId];
 
         return Container(
@@ -64,7 +62,7 @@ class MessageView extends StatelessWidget {
           ),
         );
       },
-      itemCount: _messages.length,
+      itemCount: model.messages.length,
     );
   }
 }

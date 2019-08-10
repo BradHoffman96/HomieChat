@@ -17,7 +17,7 @@ class MessageService {
     _messages = List<Message>();
   }
 
-  final StreamController<List<Message>> _messagesController = StreamController<List<Message>>();
+  final StreamController<List<Message>> _messagesController = StreamController<List<Message>>.broadcast();
 
   Stream<List<Message>> get messages => _messagesController.stream;
 
