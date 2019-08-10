@@ -8,6 +8,8 @@ const morgan = require('morgan');
 
 const config = require('./config/database.js');
 
+const Message = require('./models/message.js');
+
 mongoose.connect(config.database, { useCreateIndex: true, useNewUrlParser: true });
 
 const port = 3000
@@ -30,10 +32,26 @@ server.on('connection', socket => {
 
   socket.on('message', message => {
     console.log(message);
-    /*
-    server.clients.forEach(client => {
-      client.send(message);
+    
+    //TODO: Create new message, store it, send it to clients
+    var json = JSON.parse(message);
+    
+    var messageObj = Message({
+      timestamp: Date(),
+      sender: json.sender,
+      text: json.text
     });
-    */
+
+    messageObj.save(function(err, newMessage) {
+      if (err) throw err;
+
+      if (newMessage) {
+        server.clients.forEach(client => {
+          client.send(JSON.stringify(newMessage));
+        });
+      } else {
+        throw Error("Problem saving message");
+      }
+    });
   });
 });
