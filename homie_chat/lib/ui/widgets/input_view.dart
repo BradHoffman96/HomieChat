@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:homie_chat/core/models/user.dart';
 import 'package:homie_chat/core/viewmodels/widgets/input_view_model.dart';
 import 'package:homie_chat/ui/views/base_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class InputView extends StatefulWidget {
   final User user;
@@ -28,11 +31,6 @@ class _InputViewState extends State<InputView> {
     );
   }
 
-  _handleSubmittedMessage(InputViewModel model) {
-    model.sendMessage(widget.user, _textController.text);
-    _textController.clear();
-  }
-
   Widget _textComposer(BuildContext context, InputViewModel model) {
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).accentColor),
@@ -44,7 +42,7 @@ class _InputViewState extends State<InputView> {
               //margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.camera_alt),
-                onPressed: () => _showMediaSelectionSheet(context),
+                onPressed: () => _showMediaSelectionSheet(context, model),
               ),
             ),
             Flexible(
@@ -59,7 +57,10 @@ class _InputViewState extends State<InputView> {
               margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.send),
-                onPressed: () => _handleSubmittedMessage(model),
+                onPressed: () {
+                  model.sendMessage(widget.user, _textController.text);
+                  _textController.clear();
+                }
               ),
             )
           ],
@@ -68,7 +69,7 @@ class _InputViewState extends State<InputView> {
     );
   }
 
-  _showMediaSelectionSheet(BuildContext context) {
+  _showMediaSelectionSheet(BuildContext context, InputViewModel model) {
     showModalBottomSheet(context: context, builder: (BuildContext context) {
       return new Column(
         mainAxisSize: MainAxisSize.min,
@@ -79,12 +80,7 @@ class _InputViewState extends State<InputView> {
             onTap: () async {
               Navigator.pop(context);
               print("Camera");
-              /*
-              var result = await getImageFromCamera();
-              if (result) {
-                _handleSubmittedMessage("");
-              }
-              */
+              model.sendImage(user: widget.user, fromCamera: true);
             }
           ),
           new ListTile(
@@ -93,12 +89,7 @@ class _InputViewState extends State<InputView> {
             onTap: () async {
               Navigator.pop(context);
               print("Gallery");
-              /*
-              var result = await getImageFromGallery();
-              if (result) {
-                _handleSubmittedMessage("");
-              }
-              */
+              model.sendImage(user: widget.user, fromCamera: false);
             }
           ),
         ],

@@ -5,6 +5,7 @@ class Message {
   String senderId;
   String text;
   String timestamp;
+  String image;
   //int likes;
   //File image;
 
@@ -15,6 +16,10 @@ class Message {
     id = json['_id'];
     text = json['text'];
     timestamp = json['timestamp'];
+
+    //Might have to add a type variable for message to make this process a little easier
+    image = json['image'] ?? "";
+
 
     //Need to build a getImage() function for the messages
     //image = getImageFromServer()
