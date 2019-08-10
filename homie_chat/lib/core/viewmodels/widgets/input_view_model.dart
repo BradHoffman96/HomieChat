@@ -24,6 +24,8 @@ class InputViewModel extends BaseModel {
 
     var result = await _messageService.sendMessage(json.encode(payload));
 
+    setBusy(false);
+
     return result;
   }
 

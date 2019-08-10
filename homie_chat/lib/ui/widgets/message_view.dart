@@ -21,13 +21,10 @@ class MessageView extends StatelessWidget {
         authenticationService: Provider.of(context),
         messageService: Provider.of(context)),
       onModelReady: (model) => model.connectToSocket(),
-      builder: (context, model, child) => Scaffold(
-        appBar: AppBar(title: Text("HOMIE CHAT"),),
-        body: model.busy
-          ? Column(
-            children: <Widget>[CircularProgressIndicator()],
-          ) : _messageView(context, model, _group)
-      ),
+      builder: (context, model, child) => model.busy
+        ? Column(
+          children: <Widget>[CircularProgressIndicator()],
+        ) : _messageView(context, model, _group)
     );
   }
 

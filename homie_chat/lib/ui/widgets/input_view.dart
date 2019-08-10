@@ -39,7 +39,7 @@ class _InputViewState extends State<InputView> {
               //margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.camera_alt),
-                onPressed: _showMediaSelectionSheet(context),
+                onPressed: () => _showMediaSelectionSheet(context),
               ),
             ),
             Flexible(
