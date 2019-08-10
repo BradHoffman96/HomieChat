@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
+
+import 'dart:typed_data';
 
 class Message {
   String id;
   String senderId;
   String text;
   String timestamp;
-  String image;
+  Uint8List image;
   //int likes;
   //File image;
 
@@ -18,22 +21,8 @@ class Message {
     timestamp = json['timestamp'];
 
     //Might have to add a type variable for message to make this process a little easier
-    image = json['image'] ?? "";
-
-
-    //Need to build a getImage() function for the messages
-    //image = getImageFromServer()
+    if (json['image'] != null) {
+      image = base64Decode(json['image']) ;
+    }
   }
-
-  // Instead of having a toJson(), I think I am going to just send the message (or image) over
-  // And let the server handle the creation, then return me a message.
-  // That'll help with ordering of messages too.
-
-  /*
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-
-    data['owner'] = this.user
-  }
-  */
 }
