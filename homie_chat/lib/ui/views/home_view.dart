@@ -29,14 +29,14 @@ class HomeView extends StatelessWidget {
           children: <Widget>[
             model.busy
               ? Center(child: CircularProgressIndicator(),)
-              : _mainPage(child)
+              : _mainPage()
           ]
         ),
       ),
     );
   }
 
-  _mainPage(Widget child) {
+  _mainPage() {
     return Flexible(
       child: ListView(
         children: <Widget>[
