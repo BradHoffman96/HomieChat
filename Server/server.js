@@ -1,3 +1,4 @@
+const WebSocket = require('ws');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -20,6 +21,16 @@ app.use(passport.initialize());
 
 app.use('/', require('./routes'));
 
-app.listen(port, () => {
+const server = new WebSocket.Server({ server: app.listen(port, () => {
   console.log("Server is now listening on port: " + port);
-})
+})});
+
+server.on('connection', socket => {
+  console.log("SOCKET CONNECTION");
+
+  socket.on('message', message => {
+    server.clients.forEach(client => {
+      client.send(message);
+    });
+  });
+});
