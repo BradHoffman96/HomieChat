@@ -13,7 +13,9 @@ class MessageService {
   List<Message> _messages;
   WebSocketChannel _channel;
 
-  MessageService();
+  MessageService() {
+    _messages = List<Message>();
+  }
 
   final StreamController<List<Message>> _messagesController = StreamController<List<Message>>();
 
@@ -22,12 +24,9 @@ class MessageService {
   Future<bool> connectToSocket() async {
     _channel = IOWebSocketChannel.connect("ws://localhost:3000");
 
-    _channel.stream.listen((message) {
-      print(message);
-    });
+    _channel.stream.listen((message) => _receivedMessage(message));
 
-    var messages = List<Message>();
-    _messagesController.add(messages);
+    _messagesController.add(_messages);
 
     return true;
   }
@@ -37,6 +36,15 @@ class MessageService {
 
     _channel.sink.add(message);
     return true;
+  }
+
+  _receivedMessage(String payload) {
+    Message message = Message.fromJson(json.decode(payload));
+
+    print(message.timestamp);
+
+    _messages.add(message);
+    _messagesController.add(_messages);
   }
 
 }

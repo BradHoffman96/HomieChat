@@ -4,7 +4,7 @@ class Message {
   String id;
   String senderId;
   String text;
-  int timestamp;
+  String timestamp;
   //int likes;
   //File image;
 

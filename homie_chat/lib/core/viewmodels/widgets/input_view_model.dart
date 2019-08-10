@@ -14,12 +14,12 @@ class InputViewModel extends BaseModel {
     MessageService messageService
   }) : _messageService = messageService;
 
-  Future<bool> sendMessage(User user, String content) async {
+  Future<bool> sendMessage(User user, String text) async {
     setBusy(true);
 
     var payload = {
-      "userId": user.id,
-      "content": content
+      "sender": user.id,
+      "text": text 
     };
 
     var result = await _messageService.sendMessage(json.encode(payload));
