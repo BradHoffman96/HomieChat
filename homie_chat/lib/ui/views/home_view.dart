@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:homie_chat/core/models/group.dart';
 import 'package:homie_chat/core/models/user.dart';
 import 'package:homie_chat/core/viewmodels/views/home_view_model.dart';
+import 'package:homie_chat/ui/shared/ui_helpers.dart';
 import 'package:homie_chat/ui/views/base_widget.dart';
 import 'package:homie_chat/ui/widgets/input_view.dart';
 import 'package:homie_chat/ui/widgets/menu_drawer.dart';
@@ -25,25 +26,24 @@ class HomeView extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(title: Text(model.busy ? "HOMIE CHAT" : _group.name)),
         endDrawer: MenuDrawer(),
-        body: Column(
+        body: model.busy? Column(
           children: <Widget>[
-            model.busy
-              ? Center(child: CircularProgressIndicator(),)
-              : _mainPage()
+              Center(child: CircularProgressIndicator(),)
           ]
+        ) : Column(
+          children: _mainPage(),
         ),
       ),
     );
   }
 
   _mainPage() {
-    return Flexible(
-      child: ListView(
-        children: <Widget>[
-          MessageView(),
-          InputView()
-        ],
+    return [
+      Flexible(
+        child: MessageView(),
       ),
-    );
+      UIHelper.verticalSpaceSmall,
+      InputView()
+    ];
   }
 }
