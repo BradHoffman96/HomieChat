@@ -21,8 +21,15 @@ class GalleryViewModel extends BaseModel {
   }
 
   Future<void> getInitialImages() async {
+    print("GET INITIAL IMAGES");
     setBusy(true);
-    await _galleryService.getInitialImages();
+    images = await _galleryService.getInitialImages();
     setBusy(false);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }

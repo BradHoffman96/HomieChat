@@ -17,14 +17,15 @@ class GalleryService {
   final StreamController<List<ImageMessage>> _galleryController = StreamController<List<ImageMessage>>.broadcast();
 
   Stream<List<ImageMessage>> get images => _galleryController.stream;
+  StreamController<List<ImageMessage>> get imagesController => _galleryController;
 
-  Future<void> getInitialImages() async {
+  Future<List<ImageMessage>> getInitialImages() async {
     var images = await _api.getGalleryImages();
     if (images != null) {
       _images = images;
     }
     
-    _galleryController.add(_images);
+    return _images;
   }
 
   Future<bool> getMoreImages({@required String imageId}) async {
