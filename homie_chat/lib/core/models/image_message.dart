@@ -18,7 +18,7 @@ class ImageMessage {
     timestamp = json['timestamp'];
 
     //Might have to add a type variable for message to make this process a little easier
-    if (json['image'] != null) {
+    if (json['data'] != null) {
       image = base64Decode(json['data']) ;
     }
   }

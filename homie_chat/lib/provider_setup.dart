@@ -1,4 +1,6 @@
 
+import 'package:homie_chat/core/models/image_message.dart';
+import 'package:homie_chat/core/services/gallery_service.dart';
 import 'package:homie_chat/core/services/group_service.dart';
 import 'package:homie_chat/core/services/message_service.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +35,10 @@ Future<Iterable<SingleChildCloneableWidget>> getProviders() async {
     ProxyProvider<Api, MessageService>(
       builder: (context, api, messageService) =>
         MessageService(api: api),
+    ),
+    ProxyProvider<Api, GalleryService>(
+      builder: (context, api, galleryService) =>
+        GalleryService(api: api),
     )
   ];
 
@@ -45,6 +51,10 @@ Future<Iterable<SingleChildCloneableWidget>> getProviders() async {
     ),
     StreamProvider<List<Message>>(
       builder: (context) => Provider.of<MessageService>(context, listen: false).messages,
+    ),
+    //Not sure if I need to add this, but I am going to
+    StreamProvider<List<ImageMessage>>(
+      builder: (context) => Provider.of<GalleryService>(context, listen: false).images,
     )
   ];
 

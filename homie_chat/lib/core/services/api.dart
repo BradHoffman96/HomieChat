@@ -218,7 +218,7 @@ class Api {
     }
 
     List<ImageMessage> images = List<ImageMessage>();
-    for (var item in result['messages']) {
+    for (var item in result['images']) {
       ImageMessage image = ImageMessage.fromJson(item);
 
       images.add(image);

@@ -4,11 +4,9 @@ import 'package:homie_chat/core/services/gallery_service.dart';
 import 'package:homie_chat/core/viewmodels/base_model.dart';
 
 class GalleryViewModel extends BaseModel {
-  Api _api;
   GalleryService _galleryService;
 
-  GalleryViewModel({Api api, GalleryService galleryService}) {
-    _api = api;
+  GalleryViewModel({GalleryService galleryService}) {
     _galleryService = galleryService;
 
     _galleryService.images.listen(_onImagesAdded);
