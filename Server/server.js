@@ -9,6 +9,7 @@ const morgan = require('morgan');
 const config = require('./config/database.js');
 
 const Message = require('./models/message.js');
+const Image = require('./models/image.js');
 
 mongoose.connect(config.database, { useCreateIndex: true, useNewUrlParser: true });
 
@@ -31,9 +32,6 @@ server.on('connection', socket => {
   console.log("SOCKET CONNECTION");
 
   socket.on('message', message => {
-    console.log(message);
-    
-    //TODO: Create new message, store it, send it to clients
     var json = JSON.parse(message);
 
     var messageObj = Message({
@@ -53,9 +51,27 @@ server.on('connection', socket => {
       if (err) throw err;
 
       if (newMessage) {
-        server.clients.forEach(client => {
-          client.send(JSON.stringify(newMessage));
-        });
+
+        if (newMessage.image) {
+          var image = Image({
+            timestamp: Date(),
+            sender: newMessage.sender,
+            messageId: newMessage._id,
+            data: newMessage.image
+          });
+
+          image.save(function(err, newImage) {
+            if (err) throw err;
+
+            if (newImage) {
+              server.clients.forEach(client => {
+                client.send(JSON.stringify(newMessage));
+              });
+            } else {
+              throw Error("Problem saving image");
+            }
+          });
+        }
       } else {
         throw Error("Problem saving message");
       }
