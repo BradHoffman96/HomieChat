@@ -38,7 +38,18 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
+  </array>
+  <key>NSPhotoLibraryUsageDescription</key>
+	<string>This will be used to uploading profile pictures to the app as well as sending images within the group messaging system.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This will be used to uploading profile pictures to the app as well as sending images within the group messaging system.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This will allow users to record videos within the app that can be sent to the group message.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>
