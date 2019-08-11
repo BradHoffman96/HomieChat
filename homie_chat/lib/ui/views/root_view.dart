@@ -17,8 +17,11 @@ class RootView extends StatelessWidget {
        onModelReady: (model) => model.checkLogin(),
        builder: (context, model, child) {
          if (model.busy) {
+           //TODO: If can't connect to server, display error message and load LoginView()
            return Scaffold(
-             body: CircularProgressIndicator()
+             body: Center(
+               child: CircularProgressIndicator()
+             )
            );
          } else {
            if (model.hasUser) {
