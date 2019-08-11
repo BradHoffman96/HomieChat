@@ -19,7 +19,7 @@ class ImageMessage {
 
     //Might have to add a type variable for message to make this process a little easier
     if (json['image'] != null) {
-      image = base64Decode(json['image']) ;
+      image = base64Decode(json['data']) ;
     }
   }
 

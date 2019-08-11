@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:homie_chat/core/models/group.dart';
+import 'package:homie_chat/core/models/image_message.dart';
 import 'package:homie_chat/core/models/message.dart';
 import 'package:homie_chat/core/models/user.dart';
 import 'package:homie_chat/core/services/storage_service.dart';
@@ -26,6 +27,7 @@ class Api {
   static const getMembersEndpoint = "members";
 
   static const getMessagesEndpoint = "chat";
+  static const getGalleryEndpoint = "gallery";
 
   var baseHeaders = {
     "content-type": "application/json",
@@ -197,5 +199,31 @@ class Api {
     }
 
     return messages;
+  }
+
+  Future<List<ImageMessage>> getGalleryImages() async {
+    String token = await _storage.getKey("TOKEN");
+    var headers = {
+      'Authorization': token
+    };
+
+    headers.addAll(baseHeaders);
+
+    var response = await client.get('$baseUrl/$getGalleryEndpoint', headers: headers);
+    var result = json.decode(response.body);
+
+    if (result['success'] == false) {
+      print(result);
+      return null;
+    }
+
+    List<ImageMessage> images = List<ImageMessage>();
+    for (var item in result['messages']) {
+      ImageMessage image = ImageMessage.fromJson(item);
+
+      images.add(image);
+    }
+
+    return images;
   }
 }
