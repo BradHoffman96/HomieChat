@@ -8,6 +8,7 @@ import 'package:homie_chat/ui/views/login_view.dart';
 import 'package:homie_chat/ui/views/profile_view.dart';
 import 'package:homie_chat/ui/views/register_view.dart';
 import 'package:homie_chat/ui/views/root_view.dart';
+import 'package:homie_chat/ui/views/video_call_view.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -26,6 +27,8 @@ class Router {
         return MaterialPageRoute(builder: (_) => GroupSettingsView());
       case RoutePaths.Gallery:
         return MaterialPageRoute(builder: (_) => GalleryView());
+      case RoutePaths.VideoCall:
+        return MaterialPageRoute(builder: (_) => VideoCallView());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

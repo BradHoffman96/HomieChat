@@ -6,4 +6,5 @@ class RoutePaths {
   static const String GroupSettings = "settings";
   static const String Profile = "profile";
   static const String Gallery = "gallery";
+  static const String VideoCall = "video_call";
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homie_chat/core/constants/app_constants.dart';
 import 'package:homie_chat/core/models/group.dart';
 import 'package:homie_chat/core/models/user.dart';
 import 'package:homie_chat/core/viewmodels/views/home_view_model.dart';
@@ -24,7 +25,13 @@ class HomeView extends StatelessWidget {
         //await model.getGroupMembers(_group);
       },
       builder: (context, model, child) => Scaffold(
-        appBar: AppBar(title: Text(model.busy ? "HOMIE CHAT" : _group.name)),
+        appBar: AppBar(
+          title: Text(model.busy ? "HOMIE CHAT" : _group.name),
+          leading: IconButton(
+            icon: Icon(Icons.video_call),
+            onPressed: () => Navigator.of(context).pushNamed(RoutePaths.VideoCall),
+          ),
+        ),
         endDrawer: MenuDrawer(),
         body: model.busy? Column(
           children: <Widget>[
