@@ -32,6 +32,7 @@ server.on('connection', socket => {
   console.log("SOCKET CONNECTION");
 
   socket.on('message', message => {
+    console.log("new message");
     var json = JSON.parse(message);
 
     var messageObj = Message({
@@ -63,15 +64,15 @@ server.on('connection', socket => {
           image.save(function(err, newImage) {
             if (err) throw err;
 
-            if (newImage) {
-              server.clients.forEach(client => {
-                client.send(JSON.stringify(newMessage));
-              });
-            } else {
+            if (!newImage) {
               throw Error("Problem saving image");
             }
           });
         }
+
+        server.clients.forEach(client => {
+          client.send(JSON.stringify(newMessage));
+        });
       } else {
         throw Error("Problem saving message");
       }

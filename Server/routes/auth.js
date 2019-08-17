@@ -78,9 +78,15 @@ router.post("/register", /*createUser,*/ upload.single('image'), async function 
 
         res.status(200).json({success: true, token: 'JWT ' + token});
       });*/
+
       if (user) {
-        const token = jwt.encode(user, config.secret);
-        res.status(200).json({success: true, token: 'JWT ' + token});
+        group.members.push(user._id);
+        group.save(function(err, newGroup) {
+          if (err) throw err;
+
+          const token = jwt.encode(user, config.secret);
+          res.status(200).json({success: true, token: 'JWT ' + token});
+        });
       }
     });
   });
