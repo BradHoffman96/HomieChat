@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:homie_chat/core/config/config.dart';
 import 'package:homie_chat/core/models/message.dart';
 import 'package:homie_chat/core/services/api.dart';
 import 'package:web_socket_channel/io.dart';
@@ -24,7 +25,7 @@ class MessageService {
   Stream<List<Message>> get messages => _messagesController.stream;
 
   Future<bool> connectToSocket() async {
-    _channel = IOWebSocketChannel.connect("ws://localhost:3000");
+    _channel = IOWebSocketChannel.connect("ws://" + Config.serverAddress + ":3000");
 
     _channel.stream.listen((message) => _receivedMessage(message));
 
@@ -46,6 +47,7 @@ class MessageService {
   }
 
   _receivedMessage(String payload) {
+    print("NEW MESSAGE");
     Message message = Message.fromJson(json.decode(payload));
 
     print(message.timestamp);

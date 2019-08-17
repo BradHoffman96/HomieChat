@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:homie_chat/core/config/config.dart';
 import 'package:homie_chat/core/models/group.dart';
 import 'package:homie_chat/core/models/image_message.dart';
 import 'package:homie_chat/core/models/message.dart';
@@ -14,7 +15,7 @@ class Api {
 
   Api({StorageService storage}) : _storage = storage;
 
-  static const baseUrl = "http://127.0.0.1:3000";
+  static const baseUrl = "http://" + Config.serverAddress + ":3000";
 
   static const loginEndpoint = "auth/login";
   static const logoutEndpoint = "auth/logout";
@@ -40,7 +41,8 @@ class Api {
     var body = {
       'email': email,
       'password': password,
-      'display_name': displayName
+      'display_name': displayName,
+      'group_id': "5d580ef1427dc5380f4e6047"
     };
 
     var response = await client.post('$baseUrl/$registerEndpoint', headers: baseHeaders, body: json.encode(body));
