@@ -42,8 +42,23 @@ var upload = multer({
 router.post("/register", /*createUser,*/ upload.single('image'), async function (req, res) {
   console.log(req.body);
 
-  Group.findOne({}, function(err, group) {
+  Group.findOne({}, async function(err, group) {
     if (err) throw err;
+
+    if (!group) {
+      group = Group({
+        name: "Default",
+        topic: "Default"
+      });
+
+      await group.save(function(err, newGroup) {
+        if (err) throw err;
+
+        if (!newGroup) throw Error("New Group is nil");
+
+        group = newGroup;
+      });
+    }
 
     var newUser = new User({
       email: req.body.email,
