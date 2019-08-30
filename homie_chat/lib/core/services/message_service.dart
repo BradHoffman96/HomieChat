@@ -43,19 +43,18 @@ class MessageService {
   }
 
   Future<bool> sendMessage(String message) async {
-
-    //TODO: What happens if my sink is closed?
     _channel.sink.add(message);
     return true;
   }
 
   _receivedMessage(String payload) {
-    Message message = Message.fromJson(json.decode(payload));
+    var result = json.decode(payload);
 
-    print(message.timestamp);
-
-    _messages.insert(0, message);
-    _messagesController.add(_messages);
+    if(result['type'] == 'message') {
+      Message message = Message.fromJson(result['message']);
+      _messages.insert(0, message);
+      _messagesController.add(_messages);
+    }
   }
 
 }
