@@ -5,6 +5,7 @@ import 'package:homie_chat/ui/views/gallery_view.dart';
 import 'package:homie_chat/ui/views/group_settings_view.dart';
 import 'package:homie_chat/ui/views/home_view.dart';
 import 'package:homie_chat/ui/views/login_view.dart';
+import 'package:homie_chat/ui/views/members_view.dart';
 import 'package:homie_chat/ui/views/profile_view.dart';
 import 'package:homie_chat/ui/views/register_view.dart';
 import 'package:homie_chat/ui/views/root_view.dart';
@@ -26,6 +27,8 @@ class Router {
         return MaterialPageRoute(builder: (_) => GroupSettingsView());
       case RoutePaths.Gallery:
         return MaterialPageRoute(builder: (_) => GalleryView());
+      case RoutePaths.Members:
+        return MaterialPageRoute(builder: (_) => MembersView());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

@@ -45,6 +45,7 @@ class MenuDrawer extends StatelessWidget {
             ),
             Divider(),
             _listTile(title: "Profile", path: RoutePaths.Profile, context: context),
+            _listTile(title: "Members", path: RoutePaths.Members, context: context),
             _listTile(title: "Gallery", path: RoutePaths.Gallery, context: context),
             _listTile(title: "Group Settings", path: RoutePaths.GroupSettings, context: context)
           ]
