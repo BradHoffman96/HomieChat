@@ -7,7 +7,8 @@ var UserSchema = new Schema({
   password: { type: String, required: true},
   display_name: { type: String, required: true },
   groups: [String],
-  created_at: Date
+  created_at: Date,
+  image: String
 });
 
 UserSchema.methods.comparePassword = function(password, callback) {

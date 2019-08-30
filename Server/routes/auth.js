@@ -65,34 +65,13 @@ router.post("/register", /*createUser,*/ upload.single('image'), async function 
       password: req.body.password,
       display_name: req.body.display_name,
       groups: [group._id],
-      created_at: Date.now()
+      created_at: Date.now(),
+      image: req.body.image
     });
 
     newUser.save(function(err, user) {
       if (err) throw err;
       console.log("User created");
-
-      if (!fs.existsSync('./images')) {
-        console.log("Creating images folder.");
-        fs.mkdirSync('./images');
-      }
-
-      var dir = "./images/" + user.id;
-      if (!fs.existsSync(dir)) {
-        console.log("Creating dir:" + dir);
-        fs.mkdirSync(dir);
-      }
-
-      //upload image
-      fs.writeFile(dir + "/profile.png", new Buffer(req.body.image, 'base64'), function(err) {
-        if (err) throw err;
-
-        console.log("File uploaded!")
-        const token = jwt.encode(user, config.secret);
-
-
-        res.status(200).json({success: true, token: 'JWT ' + token});
-      });
 
       if (user) {
         group.members.push(user._id);
@@ -118,6 +97,7 @@ router.post("/login", (req, res) => {
     } else {
       user.comparePassword(req.body.password, function(err, isMatch) {
         if (isMatch && !err) {
+          user.image = undefined
           var token = jwt.encode(user, config.secret);
 
           res.status(200).json({success: true, token: 'JWT ' + token});
