@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:homie_chat/core/services/authentication_service.dart';
 import 'package:homie_chat/core/viewmodels/base_model.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 
 class RegisterViewModel extends BaseModel {
   AuthenticationService _authenticationService;
@@ -22,7 +24,14 @@ class RegisterViewModel extends BaseModel {
     @required password
   }) async {
     setBusy(true);
-    var success = await _authenticationService.register(displayName: displayName, email: email, password: password);
+
+    if (_image == null) {
+      Directory directory = await getApplicationDocumentsDirectory();
+      var imagePath = join(directory.path, "default_profile.png");
+      _image = File(imagePath);
+    }
+
+    var success = await _authenticationService.register(displayName: displayName, email: email, password: password, image: _image);
     setBusy(false);
     return success;
   }

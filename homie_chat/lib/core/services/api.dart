@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:homie_chat/core/models/group.dart';
@@ -36,11 +37,12 @@ class Api {
 
   var client = new http.Client();
 
-  Future<bool> registerUser({String email, String password, String displayName}) async {
+  Future<bool> registerUser({String email, String password, String displayName, File image}) async {
     var body = {
       'email': email,
       'password': password,
-      'display_name': displayName
+      'display_name': displayName,
+      'image': base64Encode(image.readAsBytesSync())
     };
 
     var response = await client.post('$baseUrl/$registerEndpoint', headers: baseHeaders, body: json.encode(body));

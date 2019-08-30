@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:homie_chat/core/models/user.dart';
 import 'api.dart';
@@ -16,9 +17,10 @@ class AuthenticationService {
   Future<bool> register({
     @required String displayName,
     @required String email,
-    @required String password
+    @required String password,
+    @required File image
   }) async {
-    var success = await _api.registerUser(displayName: displayName, email: email, password: password);
+    var success = await _api.registerUser(displayName: displayName, email: email, password: password, image: image);
 
     return success;
   }

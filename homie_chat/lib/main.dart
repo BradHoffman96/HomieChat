@@ -1,16 +1,31 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:homie_chat/provider_setup.dart';
 import 'package:homie_chat/ui/router.dart';
-import 'package:homie_chat/ui/views/login_view.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:path/path.dart';
 
 import 'core/constants/app_constants.dart';
 
 Future main() async {
   var providers = await getProviders();
+  await storeProfileImage();
 
   runApp(MyApp(providers: providers));
 } 
+
+Future<void> storeProfileImage() async {
+  Directory directory = await getApplicationDocumentsDirectory();
+  var imagePath = join(directory.path, "default_profile.png");
+  if (FileSystemEntity.typeSync(imagePath) == FileSystemEntityType.notFound) {
+    ByteData data = await rootBundle.load("assets/profile.png");
+    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    await File(imagePath).writeAsBytes(bytes);
+  }
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -40,10 +55,5 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: Router.generateRoute,
       ),
     );
-  }
-
-  Widget _getStartupScreen() {
-
-
   }
 }
