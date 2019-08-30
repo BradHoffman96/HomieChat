@@ -38,6 +38,10 @@ class MessageService {
     return true;
   }
 
+  Future<dynamic> closeSocket() async {
+    return _channel.sink.close();
+  }
+
   Future<bool> sendMessage(String message) async {
 
     //TODO: What happens if my sink is closed?

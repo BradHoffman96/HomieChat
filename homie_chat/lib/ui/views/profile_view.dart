@@ -19,7 +19,9 @@ class _ProfileViewState extends State<ProfileView> {
     final _user = Provider.of<User>(context);
 
     return BaseWidget<ProfileModel>(
-      model: ProfileModel(authenticationService: Provider.of(context)),
+      model: ProfileModel(
+        authenticationService: Provider.of(context),
+        messageService: Provider.of(context)),
       onModelReady: (model) => model.initializeTextField(user: _user),
       builder: (context, model, child) => Scaffold(
         appBar: _appBar(model: model, user: _user),

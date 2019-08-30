@@ -3,16 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:homie_chat/core/models/user.dart';
 import 'package:homie_chat/core/services/authentication_service.dart';
+import 'package:homie_chat/core/services/message_service.dart';
 import 'package:homie_chat/core/viewmodels/base_model.dart';
 
 class ProfileModel extends BaseModel {
   final AuthenticationService _authenticationService;
+  final MessageService _messageService;
 
   TextEditingController _displayNameController;
 
   TextEditingController get controller => _displayNameController;
 
-  ProfileModel({AuthenticationService authenticationService}) : _authenticationService = authenticationService;
+  ProfileModel({AuthenticationService authenticationService, MessageService messageService}) 
+    : _authenticationService = authenticationService,
+      _messageService = messageService;
 
   initializeTextField({User user}) {
     setBusy(true);
@@ -34,7 +38,9 @@ class ProfileModel extends BaseModel {
   Future<bool> logout() async {
     setBusy(true);
 
+    var result = await _messageService.closeSocket();
     var success = await _authenticationService.logout();
+    print(result);
 
     setBusy(false);
     return success;
