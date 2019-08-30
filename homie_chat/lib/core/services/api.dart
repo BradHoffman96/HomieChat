@@ -149,34 +149,6 @@ class Api {
     return Group.fromJson(json.decode(response.body)['newGroup']);
   }
 
-  Future<List<User>> getGroupMembers({@required String id}) async {
-    String token = await _storage.getKey("TOKEN");
-    var headers = {
-      'Authorization': token
-    };
-
-    headers.addAll(baseHeaders);
-
-    var response = await client.get('$baseUrl/$getGroupEndpoint/$id/$getMembersEndpoint', headers: headers);
-    var result = json.decode(response.body);
-
-    print(result);
-
-    if (result['success'] == false) {
-      print(result);
-      return null;
-    }
-
-    List<User> members = List<User>();
-    for (var item in result['members']) {
-      User user = User.fromJson(item);
-
-      members.add(user);
-    }
-
-    return members;
-  }
-
   Future<List<Message>> getMostRecentMessages() async {
     String token = await _storage.getKey("TOKEN");
     var headers = {

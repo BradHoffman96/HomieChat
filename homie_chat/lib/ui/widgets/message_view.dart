@@ -51,7 +51,7 @@ class MessageView extends StatelessWidget {
               //TODO: Going to have to pull this widget out when I implement actual profile pictures
               Container(
                 margin: EdgeInsets.only(right: 16.0),
-                child: CircleAvatar(child: Text(author.displayName[0]))
+                child: ClipOval(child: Image.memory(author.image, fit: BoxFit.cover, width: 40, height: 40,))
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

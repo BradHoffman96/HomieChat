@@ -17,8 +17,6 @@ class Group {
   Group({this.id, this.name, this.topic, this.members});
 
   Group.fromJson(Map<String, dynamic> data) {
-    print(data);
-
     id = data["_id"];
     name = data["name"];
     topic = data["topic"];
