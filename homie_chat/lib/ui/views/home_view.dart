@@ -25,7 +25,7 @@ class HomeView extends StatelessWidget {
       },
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(title: Text(model.busy ? "HOMIE CHAT" : _group.name)),
-        endDrawer: MenuDrawer(),
+        endDrawer: MenuDrawer(group: _group),
         body: model.busy? Column(
           children: <Widget>[
               Center(child: CircularProgressIndicator(),)
