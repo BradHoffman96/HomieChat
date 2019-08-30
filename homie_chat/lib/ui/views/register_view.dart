@@ -39,6 +39,28 @@ class _RegisterViewState extends State<RegisterView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
+                Container(
+                  width: 200,
+                  height: 200,
+                  padding: EdgeInsets.all(2.0),
+                  decoration: new BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(spreadRadius: .1,
+                        blurRadius: 5.0,
+                        offset: Offset(2.0, 2.0))
+                    ]
+                  ),
+                  child: GestureDetector(
+                    onTap: () => model.getImage(),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: (model.image != null) ? FileImage(model.image) : AssetImage("assets/profile.png")
+                    ),
+                  )
+                ),
+                UIHelper.verticalSpaceMedium,
                 child,
                 UIHelper.verticalSpaceMedium,
                 model.busy
