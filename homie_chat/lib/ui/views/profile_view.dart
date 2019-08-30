@@ -22,7 +22,7 @@ class _ProfileViewState extends State<ProfileView> {
       model: ProfileModel(
         authenticationService: Provider.of(context),
         messageService: Provider.of(context)),
-      onModelReady: (model) => model.initializeTextField(user: _user),
+      onModelReady: (model) => model.initialize(user: _user),
       builder: (context, model, child) => Scaffold(
         appBar: _appBar(model: model, user: _user),
         body: Center(
@@ -30,6 +30,28 @@ class _ProfileViewState extends State<ProfileView> {
             padding: const EdgeInsets.all(32.0),
             child: Column(
               children: <Widget>[
+                Container(
+                  width: 200,
+                  height: 200,
+                  padding: EdgeInsets.all(2.0),
+                  decoration: new BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(spreadRadius: .1,
+                        blurRadius: 5.0,
+                        offset: Offset(2.0, 2.0))
+                    ]
+                  ),
+                  child: GestureDetector(
+                    onTap: () => model.getImage(),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: MemoryImage(model.image)
+                    ),
+                  )
+                ),
+                UIHelper.verticalSpaceMedium,
                 _displayNameTextField(model: model),
                 UIHelper.verticalSpaceMedium,
                 _logoutButton(model: model, context: context)
@@ -51,7 +73,7 @@ class _ProfileViewState extends State<ProfileView> {
           onPressed: () {
             setState(() {
               isEditing = false;
-              model.initializeTextField(user: user);
+              model.initialize(user: user);
             });
           },
         ) : Container(),

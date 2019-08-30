@@ -108,7 +108,8 @@ class Api {
     headers.addAll(baseHeaders);
 
     var body = {
-      'display_name': user.displayName
+      'display_name': user.displayName,
+      'image': base64Encode(user.image.toList())
     };
 
     var response = await client.post('$baseUrl/$updateUserEndpoint', headers: headers, body: json.encode(body));
