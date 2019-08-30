@@ -70,8 +70,13 @@ server.on('connection', socket => {
           });
         }
 
+        var payload = {
+          type: "message",
+          message: newMessage
+        }
+
         server.clients.forEach(client => {
-          client.send(JSON.stringify(newMessage));
+          client.send(JSON.stringify(payload));
         });
       } else {
         throw Error("Problem saving message");
@@ -85,7 +90,8 @@ app.use(function(err, req, res, next) {
 
   if (res.locals.updatedDetails) {
     var updateMessage = {
-      msg: "DETAILS_UPDATED"
+      type: "update",
+      message: "DETAILS_UPDATED"
     }
 
     server.clients.forEach(client => {
