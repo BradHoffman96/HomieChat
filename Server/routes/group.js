@@ -61,35 +61,10 @@ router.post("/:id", passport.authenticate('jwt', {session: false}), function(req
 
       group.name = req.body.name;
       group.topic = req.body.topic;
+      group.image = req.body.image;
 
       group.save(async function(err, newGroup) {
         if (err) throw err;
-
-        /*
-        if (!fs.existsSync('./images')) {
-          console.log("Creating images folder.");
-          fs.mkdirSync('./images');
-        }
-
-        var dir = "./images/" + newGroup._id;
-        if (!fs.existsSync(dir)) {
-          console.log("Creating dir:" + dir);
-          fs.mkdirSync(dir);
-        }
-
-        //upload image
-        fs.writeFile(dir + "/group.png", new Buffer(req.body.image, 'base64'), function(err) {
-          if (err) throw err;
-
-          console.log("File uploaded!")
-
-          if (newGroup) {
-            return res.status(200).json({success: true, msg: "Group successfully updated."});
-          } else {
-            return res.status(400).json({success: false, msg: "Something went wrong."});
-          }
-        });
-        */
 
         if (newGroup) {
           var members = await getGroupMembers(newGroup);
