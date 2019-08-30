@@ -22,6 +22,27 @@ app.use(bodyParser.json({limit: '100mb'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 
+app.use(function(req, res, next) {
+  var json = res.json;
+  res.json = function(body) {
+    if (res.locals.updatedDetails) {
+      console.log("sending update message");
+      var updateMessage = {
+        type: "update",
+        message: "DETAILS_UPDATED"
+      }
+
+      server.clients.forEach(client => {
+        client.send(JSON.stringify(updateMessage));
+      });
+    }
+    
+    json.call(this, body); 
+  }
+  
+  next();
+});
+
 app.use('/', require('./routes'));
 
 const server = new WebSocket.Server({ server: app.listen(port, () => {
@@ -85,17 +106,3 @@ server.on('connection', socket => {
   });
 });
 
-app.use(function(err, req, res, next) {
-  if (err) throw err;
-
-  if (res.locals.updatedDetails) {
-    var updateMessage = {
-      type: "update",
-      message: "DETAILS_UPDATED"
-    }
-
-    server.clients.forEach(client => {
-      client.send(JSON.stringify(updatedMessage));
-    });
-  }
-});
