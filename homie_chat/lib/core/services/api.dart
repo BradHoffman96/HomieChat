@@ -142,7 +142,8 @@ class Api {
 
     var body = {
       "name": group.name,
-      "topic": group.topic
+      "topic": group.topic,
+      "image": (group.image != null) ? base64Encode(group.image.toList()) : ""
     };
 
     var response = await client.post('$baseUrl/$updateGroupEndpoint/${group.id}', headers: headers, body: json.encode(body));

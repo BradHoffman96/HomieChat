@@ -27,6 +27,32 @@ class _GroupSettingsViewState extends State<GroupSettingsView> {
             padding: const EdgeInsets.all(32.0),
             child: Column(
               children: <Widget>[
+                Container(
+                  width: 200,
+                  height: 200,
+                  padding: EdgeInsets.all(2.0),
+                  decoration: new BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(spreadRadius: .1,
+                        blurRadius: 5.0,
+                        offset: Offset(2.0, 2.0))
+                    ]
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (isEditing) {
+                        model.getImage();
+                      }
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: (model.image != null) ? MemoryImage(model.image) : AssetImage("assets/profile.png")
+                    ),
+                  )
+                ),
+                UIHelper.verticalSpaceMedium,
                 _nameTextField(model: model),
                 UIHelper.verticalSpaceMedium,
                 _topicTextField(model: model)

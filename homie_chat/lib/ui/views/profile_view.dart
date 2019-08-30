@@ -44,7 +44,11 @@ class _ProfileViewState extends State<ProfileView> {
                     ]
                   ),
                   child: GestureDetector(
-                    onTap: () => model.getImage(),
+                    onTap: () {
+                      if (isEditing) {
+                        model.getImage();
+                      }
+                    },
                     child: CircleAvatar(
                       backgroundColor: Colors.transparent,
                       backgroundImage: MemoryImage(model.image)
