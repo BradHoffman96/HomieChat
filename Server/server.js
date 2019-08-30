@@ -79,3 +79,17 @@ server.on('connection', socket => {
     });
   });
 });
+
+app.use(function(err, req, res, next) {
+  if (err) throw err;
+
+  if (res.locals.updatedDetails) {
+    var updateMessage = {
+      msg: "DETAILS_UPDATED"
+    }
+
+    server.clients.forEach(client => {
+      client.send(JSON.stringify(updatedMessage));
+    });
+  }
+});

@@ -61,6 +61,7 @@ router.post('/', passport.authenticate("jwt", {session: false}), function(req, r
 
         if (newUser) {
           newUser.password = undefined;
+          res.locals.updatedDetails = true;
           res.status(200).json({success: true, msg: "User successfully updated.", newUser: newUser});
         } else {
           res.status(400).json({success: false, msg: "Something went wrong."});

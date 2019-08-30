@@ -28,7 +28,6 @@ var getGroupMembers = async function(group) {
 }
 
 router.post("/", /*passport.authenticate('jwt', {session:false}),*/ function(req, res) {
-
   const newGroup = new Group({
     //owner: req.user.id,
     name: req.body.name,
@@ -71,8 +70,7 @@ router.post("/:id", passport.authenticate('jwt', {session: false}), function(req
 
           var tempGroup = newGroup.toObject();
           tempGroup.members = members;
-
-          console.log(tempGroup);
+          res.locals.updatedDetails = true;
 
           return res.status(200).json({success: true, msg: "Group successfully updated.", newGroup: tempGroup});
         } else {
