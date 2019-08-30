@@ -40,7 +40,6 @@ class ProfileModel extends BaseModel {
 
     var result = await _messageService.closeSocket();
     var success = await _authenticationService.logout();
-    print(result);
 
     setBusy(false);
     return success;
