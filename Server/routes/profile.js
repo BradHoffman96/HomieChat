@@ -53,35 +53,12 @@ router.post('/', passport.authenticate("jwt", {session: false}), function(req, r
 
     if (user) {
       user.display_name = req.body.display_name;
+      console.log(req.body.image);
+      user.image = req.body.image;
 
       user.save(function (err, newUser) {
         if (err) throw err;
 
-        /*
-        if (!fs.existsSync('./images')) {
-          console.log("Creating images folder.");
-          fs.mkdirSync('./images');
-        }
-
-        var dir = "./images/" + newUser.id;
-        if (!fs.existsSync(dir)) {
-          console.log("Creating dir:" + dir);
-          fs.mkdirSync(dir);
-        }
-
-        //upload image
-        fs.writeFile(dir + "/profile.png", new Buffer(req.body.image, 'base64'), function(err) {
-          if (err) throw err;
-
-          console.log("File uploaded!")
-
-          if (newUser) {
-            res.status(200).json({success: true, msg: "User successfully updated."});
-          } else {
-            res.status(400).json({success: false, msg: "Something went wrong."});
-          }
-        });
-        */
         if (newUser) {
           newUser.password = undefined;
           res.status(200).json({success: true, msg: "User successfully updated.", newUser: newUser});
