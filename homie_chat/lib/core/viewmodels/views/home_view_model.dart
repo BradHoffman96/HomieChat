@@ -15,6 +15,7 @@ class HomeViewModel extends BaseModel {
   AuthenticationService _authenticationService;
   GroupService _groupService;
   WebSocketChannel _channel;
+  String _groupId;
 
   HomeViewModel({
     @required AuthenticationService authenticationService,
@@ -38,8 +39,8 @@ class HomeViewModel extends BaseModel {
 
     var success = false;
     if (_user != null) {
-      var groupId = _user.groups[0];
-      success = await _groupService.getGroup(groupId: groupId);
+      _groupId = _user.groups[0];
+      success = await _groupService.getGroup(groupId: _groupId);
       print("GET GROUP: $success");
     }
 
@@ -57,12 +58,13 @@ class HomeViewModel extends BaseModel {
     return _channel.sink.close();
   }
 
-  _receivedMessage(String payload) {
+  _receivedMessage(String payload) async {
     var message = json.decode(payload);
 
     if (message['type'] == "update") {
       setBusy(true);
       print("Updating data");
+      await _groupService.getGroup(groupId: _groupId);
       setBusy(false);
     }
   }
