@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>HomieChat</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,6 +24,17 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>This will be used to uploading profile pictures to the app as well as sending images within the group messaging system.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This will allow users to record videos within the app that can be sent to the group message.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This will be used to uploading profile pictures to the app as well as sending images within the group messaging system.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -38,18 +51,7 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-  </array>
-  <key>NSPhotoLibraryUsageDescription</key>
-	<string>This will be used to uploading profile pictures to the app as well as sending images within the group messaging system.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>This will be used to uploading profile pictures to the app as well as sending images within the group messaging system.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>This will allow users to record videos within the app that can be sent to the group message.</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
+	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>
