@@ -21,7 +21,9 @@ class Group {
     id = data["_id"];
     name = data["name"];
     topic = data["topic"];
-    image = base64Decode(data['image']);
+    if (data['image'] != null) {
+      image = base64Decode(data['image']);
+    }
     List<User> users = List<User>();
 
     for (Map<String, dynamic> item in data['members']) {

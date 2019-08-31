@@ -43,4 +43,11 @@ class MessageViewModel extends BaseModel {
     return result;
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _messageService.closeSocket();
+  }
+
 }

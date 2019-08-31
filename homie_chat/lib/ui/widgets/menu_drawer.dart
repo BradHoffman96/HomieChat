@@ -21,7 +21,7 @@ class MenuDrawer extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             DrawerHeader(
-              child:Image.memory(group.image, fit: BoxFit.cover,),
+              child: (group.image != null) ? Image.memory(group.image, fit: BoxFit.cover,) : Image.asset("assest/profile.png"),
               padding: EdgeInsets.all(0),
               /*
               child: Column(

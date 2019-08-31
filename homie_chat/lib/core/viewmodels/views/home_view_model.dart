@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:homie_chat/core/models/group.dart';
 import 'package:homie_chat/core/models/message.dart';
@@ -13,6 +14,8 @@ import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class HomeViewModel extends BaseModel {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   AuthenticationService _authenticationService;
   GroupService _groupService;
   WebSocketChannel _channel;
@@ -34,6 +37,7 @@ class HomeViewModel extends BaseModel {
   }
 
   Future<bool> getGroupDetails(User _user) async {
+    _firebaseMessaging.requestNotificationPermissions();
     setBusy(true);
 
     await connectToUpdateSocket();
@@ -51,8 +55,7 @@ class HomeViewModel extends BaseModel {
   }
 
   connectToUpdateSocket() async {
-    var address = Platform.isIOS ? "ws://127.0.0.1:3000" : "ws://10.0.2.2:3000";
-    _channel = IOWebSocketChannel.connect(address);
+    _channel = IOWebSocketChannel.connect("ws://18.195.142.159:3000");
     _channel.stream.listen((message) => _receivedMessage(message));
   }
 

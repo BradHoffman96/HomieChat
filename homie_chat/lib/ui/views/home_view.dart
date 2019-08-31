@@ -10,6 +10,7 @@ import 'package:homie_chat/ui/widgets/message_view.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final _user = Provider.of<User>(context);

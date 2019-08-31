@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "210924571867",
+    "firebase_url": "https://homiechat-2a244.firebaseio.com",
+    "project_id": "homiechat-2a244",
+    "storage_bucket": "homiechat-2a244.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210924571867:android:b224977db95e069f",
+        "android_client_info": {
+          "package_name": "io.bradhoffman.homie_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210924571867-fr9ef8eq27qoh6jf6bg8gk1o2v8ugqeh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDu7Bv2cSrPT7vKn2A8iwJwRhQzeXHImDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210924571867-fr9ef8eq27qoh6jf6bg8gk1o2v8ugqeh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
