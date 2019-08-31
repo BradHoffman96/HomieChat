@@ -36,8 +36,13 @@ class HomeViewModel extends BaseModel {
     return success;
   }
 
+  Future<dynamic> displayNotification(Map<String, dynamic> notification) {
+    print(notification);
+  }
+
   Future<bool> getGroupDetails(User _user) async {
     _firebaseMessaging.requestNotificationPermissions();
+    _firebaseMessaging.configure(onMessage: displayNotification);
     setBusy(true);
 
     await connectToUpdateSocket();

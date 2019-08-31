@@ -47,5 +47,4 @@ class InputViewModel extends BaseModel {
       setBusy(false);
     }
   }
-
 }
