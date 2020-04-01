@@ -11,6 +11,7 @@ import 'package:path/path.dart';
 import 'core/constants/app_constants.dart';
 
 Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   var providers = await getProviders();
   await storeProfileImage();
 

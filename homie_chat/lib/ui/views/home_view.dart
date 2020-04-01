@@ -19,7 +19,8 @@ class HomeView extends StatelessWidget {
     return BaseWidget<HomeViewModel>(
       model: HomeViewModel(
         authenticationService: Provider.of(context),
-        groupService: Provider.of(context)),
+        groupService: Provider.of(context),
+        messageService: Provider.of(context)),
       onModelReady: (model) async {
         await model.getGroupDetails(_user);
         //await model.getGroupMembers(_group);

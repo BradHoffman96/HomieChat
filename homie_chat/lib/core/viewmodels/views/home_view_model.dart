@@ -8,25 +8,29 @@ import 'package:homie_chat/core/models/message.dart';
 import 'package:homie_chat/core/models/user.dart';
 import 'package:homie_chat/core/services/authentication_service.dart';
 import 'package:homie_chat/core/services/group_service.dart';
+import 'package:homie_chat/core/services/message_service.dart';
 import 'package:homie_chat/core/viewmodels/base_model.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class HomeViewModel extends BaseModel {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  //final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   AuthenticationService _authenticationService;
   GroupService _groupService;
+  MessageService _messageService;
   WebSocketChannel _channel;
   String _groupId;
 
   HomeViewModel({
     @required AuthenticationService authenticationService,
-    @required GroupService groupService
+    @required GroupService groupService,
+    @required MessageService messageService
   }) 
     : _authenticationService = authenticationService,
-      _groupService = groupService;
+      _groupService = groupService,
+      _messageService = messageService;
 
   Future<bool> getUser() async {
     setBusy(true);
@@ -40,11 +44,19 @@ class HomeViewModel extends BaseModel {
     print(notification);
   }
 
-  Future<bool> getGroupDetails(User _user) async {
-    _firebaseMessaging.requestNotificationPermissions();
-    _firebaseMessaging.configure(onMessage: displayNotification);
+  Future<dynamic> onLaunch(Map<String, dynamic> notification) async {
     setBusy(true);
+    await _groupService.getGroup(groupId: _groupId);
+    await _messageService.connectToSocket();
+    setBusy(false);
+  }
 
+  Future<bool> getGroupDetails(User _user) async {
+    setBusy(true);
+    //_firebaseMessaging.requestNotificationPermissions();
+    //_firebaseMessaging.configure(onMessage: displayNotification, onLaunch: onLaunch);
+
+    print("CONNECTING TO SOCKET");
     await connectToUpdateSocket();
 
     var success = false;
