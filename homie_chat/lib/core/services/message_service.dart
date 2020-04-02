@@ -25,7 +25,7 @@ class MessageService {
   Stream<List<Message>> get messages => _messagesController.stream;
 
   Future<bool> connectToSocket() async {
-    _channel = IOWebSocketChannel.connect("ws://18.195.142.159:3000");
+    _channel = IOWebSocketChannel.connect("ws://localhost:3000");
 
     _channel.stream.listen((message) => _receivedMessage(message));
 

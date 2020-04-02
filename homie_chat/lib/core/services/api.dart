@@ -15,7 +15,7 @@ class Api {
 
   Api({StorageService storage}) : _storage = storage;
 
-  static const baseUrl = "http://18.195.142.159:3000";
+  static const baseUrl = "http://localhost:3000";
 
   static const loginEndpoint = "auth/login";
   static const logoutEndpoint = "auth/logout";
